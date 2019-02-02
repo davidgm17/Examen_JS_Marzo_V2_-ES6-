@@ -39,4 +39,4 @@ paramsDataSource.headingsToZero = function() {
   return this.headings.length == 0 ? true : false;
 };
 
-export { paramsDataSource };
+module.exports = paramsDataSource;

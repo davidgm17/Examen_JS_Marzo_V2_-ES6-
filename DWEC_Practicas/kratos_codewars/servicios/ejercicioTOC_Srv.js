@@ -1,5 +1,6 @@
-var paramsDataSource = require('./cabecerasDataSource');
-var Indices = require('./indices');
+var prototypeDataSource = require('../resources/dataSourceTOC');
+var paramsDataSource = require('../resources/cabeceraDataSourceMock');
+var Indices = require('../resources/indices');
 /* function searchToc() {
   var toc = document.getElementById('TOC');
   if (!toc) {
@@ -47,5 +48,9 @@ function main(paramsDataSource, Indices) {
   });
 }
 
-let CabecerasDataSource = paramsDataSource;
-main(CabecerasDataSource, Indices);
+function ejecutar() {
+  let CabecerasDataSource = paramsDataSource(prototypeDataSource.methods);
+  main(CabecerasDataSource, Indices);
+}
+
+module.exports = ejecutar;

@@ -23,4 +23,4 @@ function inherit(p) {
   // Use f() to create an "heir" of p.
 }
 
-export { inherit };
+module.exports = inherit;
