@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DWEC_P06 Exercici 3</title>
+<script type="text/javascript">
+window.onload = function() {
+	document.getElementById("txtNums").onkeypress = function(event){
+	   return limitaCaracters(event,retornaValor(document.getElementById("selSistNum")));
+		};
+	document.getElementById("selSistNum").onchange = function() {	   
+	   document.getElementById("txtNums").value = "";
+	}
+}
+
+function limitaCaracters(elEvento, sistNum) {
+  // Variables que defineixen els caràcters permesos
+  //segons el sistema de numeració
+  var binari = "01";
+  var octal = "01234567";
+  var decimal = "0123456789";
+  var hexadecimal = "0123456789abcdefABCDEF";
+  // 8 = BackSpace, 46 = Supr, 37, 38, 39, 40 = flexes cursor  
+  var tecles_especials = [8, 37, 38, 39, 40, 46];
+  var permesos = "";
+  
+  // Seleccionar els símbols segons sistema numeració
+  switch(sistNum) {
+    case 'bin':
+      permesos = binari;
+      break;
+    case 'oct':
+      permesos = octal;
+      break;
+    case 'dec':
+      permesos = decimal;
+      break;
+    case 'hex':
+      permesos = hexadecimal;
+      break;
+    default:
+      
+  }
+ 
+  // Obtenir la tecla espitjada 
+  var evento = elEvento || window.event;
+  var codiCaracter = evento.charCode || evento.keyCode;
+  var caracter = String.fromCharCode(codiCaracter);
+ 
+  // Comprovar si la tecla espitjada és alguna de les tecles especials
+  // (tecles per esborrar i cursor)
+  var tecla_especial = false;
+  for(var i in tecles_especials) {
+    if(codiCaracter == tecles_especials[i]) {
+      tecla_especial = true;
+      break;
+    }
+  }
+  //  Comprovar si la tecla espitjada es troba dins els caràcters permeos
+  // o si és una tecla especial
+  return permesos.indexOf(caracter) != -1 || tecla_especial;
+}
+
+function retornaValor(objeto) {
+	switch (objeto.type) {
+		case "text":
+		case "textarea":
+			return objeto.value;
+		break;
+		case "radio":
+		case "checkbox":
+			//			
+			if (objeto.checked) {
+				return objeto.value;
+			}
+			else {
+				return "";
+			}
+		break;
+		case "select-one":
+			return objeto.options[objeto.selectedIndex].value;
+		break;
+	}
+}
+
+
+</script>
+</head>
+<body>
+		<input id="txtNums" type="text">	   
+	   <select id="selSistNum">
+		  <option value="bin">Binari</option>
+		  <option value="oct">Octal</option>
+		  <option value="dec">Decimal</option>
+		  <option value="hex">Hexadecimal</option>
+		</select><br>
+	</form>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 6.4</title>
+    <style>
+        p {
+            color: #7c0a02;
+        }
+    </style>
+    <script>
+        // Saca un número aleatorio entre los números indicados.
+        function numRandom(inferior, superior) {
+            return Math.floor((Math.random() * (superior - inferior + 1)) + inferior);
+        }
+
+        function init() {
+            // Crea los dos número aleatorios para la operación matemática que comprueba que el usuario no sea un robot.
+            document.getElementById('num1').innerHTML = numRandom(0, 10);
+            document.getElementById('num2').innerHTML = numRandom(0, 10);
+        }
+
+        function comprobarForm() {
+            resetErrors();
+
+            var nombre = document.getElementById('nombre');
+            var email = document.getElementById('correo');
+            var pass1 = document.getElementById('pass1');
+            var pass2 = document.getElementById('pass2');
+            var num1 = document.getElementById('num1').innerHTML;
+            var num2 = document.getElementById('num2').innerHTML;
+            var res = document.getElementById('resultado');
+
+            // Comprueba todos los campos en caso de que alguno de ellos de false sale de la función y muestra el
+            // mensaje de error.
+            if (!comprobarNombre(nombre)) {
+                nombre.focus();
+                return false;
+            }
+            if (!comprobarEmail(email)) {
+                email.focus();
+                return false;
+            }
+            if (!comprobarPass(pass1)) {
+                pass1.focus();
+                return false;
+            }
+            if (!comprobarPass2(pass1, pass2)) {
+                pass2.focus();
+                return false;
+            }
+            if (!comprobarOperacion(num1, num2, res)) {
+                res.focus();
+                return false;
+            }
+        }
+
+        function comprobarNombre(nombre) {
+            var element = document.getElementById('nombreError');
+
+            // Comprueba que el nombre no este vacio.
+            if (nombre.value == "") {
+                element.innerHTML = "El NOMBRE introducido está vacio.";
+
+                return false;
+            }
+            return true;
+        }
+
+        function comprobarEmail(correo) {
+            var email = correo.value;
+            // Elemento en el que se introducira el mensaje de error.
+            var element = document.getElementById('correoError');
+
+            // En caso del email esta vacio muestra el mensaje de error.
+            if (email == "") {
+                element.innerHTML = "El CORREO introducido está vacio.";
+                return false;
+            }
+
+            // Corta el email por la @.
+            var cortar = email.split("@");
+
+            // Comprueba que haya algo después de la @ o que haya algo antes de la @.
+            if (!cortar[1] || cortar[0] == "") {
+                element.innerHTML = "El CORREO no es válido.";
+                return false;
+            } else {
+                // Corta el texto que hay despues de la @ en el lugar que haya algún punto del dominio.
+                var dominio = cortar[1].split(".");
+
+                // Comprueba que exista algún dominio.
+                if (!dominio[1]) {
+                    element.innerHTML = "El CORREO no es válido.";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function comprobarPass(passwd){
+            var pass = passwd.value;
+
+            // Crea el elemento en el que introducira el mensaje de error.
+            var element = document.getElementById('pass1Error');
+
+            var nMay = 0, nNum = 0;
+            var valNum = "0123456879";
+            var valMay = "QWERTYUIOPASDFGHJKLÑMNBVCXZ";
+
+            // Comprueba que la contraseña no este vacia.
+            if(pass == ""){
+                element.innerHTML = "La CONTRASEÑA introducida está vacia.";
+                return false;
+            }
+
+            // Comprueba que la contraseña contenga el número de caracteres especificados.
+            if(pass.length < 8){
+                element.innerHTML = "La CONTRASEÑA introducida es muy débil introduzca una con más caracteres.";
+                return false;
+            }
+
+            // Cuenta cuantos números y mayusculas contiene la contraseña introducida.
+            for (var i = 0; i < pass.length; i++){
+                if (valNum.indexOf(pass.charAt(i)) != -1) nNum++;
+                if (valMay.indexOf(pass.charAt(i)) != -1) nMay++;
+            }
+
+            // En caso de que el contador de Mayusculas sea igual a 0, mostrará el error y saldrá de la función.
+            if(nMay < 1){
+                element.innerHTML = "La CONTRASEÑA debe contener algún carácter en mayuscula.";
+                return false;
+            }
+
+            // En caso de que el contador númerico sea igual a 0, mostrará el error y saldrá de la función.
+            if(nNum < 1){
+                element.innerHTML = "La CONTRASEÑA debe contener algún carácter númerico.";
+                return false;
+            }
+
+            return true;
+
+        }
+
+        function comprobarPass2(passwd1, passwd2){
+            var pass1 = passwd1.value;
+            var pass2 = passwd2.value;
+
+            // Crea el elemento en el que introducira el mensaje de error.
+            var element = document.getElementById('pass2Error');
+
+            if (pass2 == ""){
+                element.innerHTML = "La CONTRASEÑA está vacia.";
+                return false;
+            }
+
+            if (pass1 != pass2) {
+                element.innerHTML = "La CONTRASEÑAS introducidas no coinciden.";
+                return false;
+            }
+
+            return true;
+        }
+
+        function comprobarOperacion(num1, num2, res){
+            var elemento = document.getElementById('resultadoError');
+            var resultado = res.value;
+
+            // Comprueba que el campo no este vacio.
+            if(resultado == ""){
+                elemento.innerHTML = "El RESULTADO esta vacio.";
+                init();
+                return false;
+            }
+
+            // Comprueba que el resultado sea el mismo. En caso de no serlo muestrá el mensaje y cambia de nuevo los
+            // números.
+            if(parseInt(num1) + parseInt(num2) != resultado){
+                elemento.innerHTML = "El resultado de la operación es Erroneo.";
+                init();
+                return false;
+            }
+
+            return true;
+        }
+
+        function resetErrors(){
+            document.getElementById('nombreError').innerHTML = "";
+            document.getElementById('correoError').innerHTML = "";
+            document.getElementById('pass1Error').innerHTML = "";
+            document.getElementById('pass2Error').innerHTML = "";
+            document.getElementById('resultadoError').innerHTML = "";
+        }
+
+        // Comprueba que cuando se a hecho click sobre el checkbox de Aceptar las condiciones, activa el botón en caso
+        // de que este activado o desactiva el botón en caso de que este desmarcado.
+        function myCheck() {
+            if (document.getElementById('check').checked)
+                document.getElementById('submit').removeAttribute("disabled");
+            else
+                document.getElementById('submit').setAttribute("disabled", "");
+        }
+    </script>
+</head>
+<body onload="init()">
+<form>
+    <fieldset >
+        <p id="nombreError"></p>
+        <label for="nombre">Nombre</label><br/>
+        <input type="text" id="nombre">
+    </fieldset>
+    <fieldset>
+        <p id="correoError"></p>
+        <label for="correo">Correo</label><br/>
+        <input type="text" id="correo">
+    </fieldset>
+    <fieldset>
+        <p id="pass1Error"></p>
+        <label for="pass1">Contraseña</label><br/>
+        <input type="password" id="pass1">
+    </fieldset>
+    <fieldset>
+        <p id="pass2Error"></p>
+        <label for="pass2">Repite la Contraseña</label><br/>
+        <input type="password" id="pass2">
+    </fieldset>
+    <fieldset>
+        <p id="resultadoError"></p>
+        <label for="resultado">Resultado de la operación</label>
+        <span id="num1"></span> + <span id="num2"></span> =
+        <input type="number" id="resultado">
+    </fieldset>
+    <fieldset>
+        <input type="checkbox" id="check" onclick="myCheck()">
+        <label for="check">Acepto las condiciones</label>
+    </fieldset>
+    <button type="submit" id="submit" disabled onclick="return comprobarForm();">Crear Compte</button>
+</form>
+</body>
+</html>

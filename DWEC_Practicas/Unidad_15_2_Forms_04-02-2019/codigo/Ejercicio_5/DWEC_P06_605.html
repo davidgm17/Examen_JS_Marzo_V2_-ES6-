@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" /> 
+<head>
+<title>DWEC_Exercici 6.5</title>
+
+</head>
+<body>
+	<script>
+	function valida(){
+		var correccio = false;
+		var missatge = "";
+		var nom = document.getElementById("nom").value.trim();
+		
+		if(nom == "" || nom.length < 3){
+			missatge = "El nombre ha de contenir un mínim de 3 lletres";
+		}else{
+			correccio = true;
+		}
+		
+		if(missatge != ""){
+			alert(missatge);
+		}
+		
+		return correccio;
+	}
+	</script>
+	<form name="myForm" id="myForm" onsubmit="false" method="post">
+		<br><br><br>
+		<center>Nom:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="fname" id="nom" value="">&nbsp;&nbsp;&nbsp;
+		Cognoms:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="f2name" value=""><br><br></center>
+		<center>Tipus de vehicle: <select>
+									<option value="0">- Selecciona un tipus-</option>
+		  							<option value="1">Cotxe</option>
+		  							<option value="2">Moto</option>
+		  							<option value="3">Tractor</option>
+		  						</select>&nbsp;&nbsp;&nbsp;
+		Matr&iacute;cula:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="mat" value=""><br><br></center>
+		
+		
+		<center><input type="submit" value="Envia" onclick="valida()"></center>
+	</form>
+</body>
+</html>

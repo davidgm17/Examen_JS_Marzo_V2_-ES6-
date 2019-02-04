@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DWEC_P06 Exercici 1</title>
+<script type="text/javascript">
+function retornaValor(objeto) {
+//alert(objeto.type);
+	switch (objeto.type) {
+		case "text":
+		case "textarea":
+			return objeto.value;
+		break;
+		case "radio":
+		case "checkbox":
+			//			
+			if (objeto.checked) {
+				return objeto.value;
+			}
+			else {
+				return "";			
+			}
+		break;
+		case "select-one":
+			return objeto.options[objeto.selectedIndex].value;
+		break;
+	}
+}
+function validateForm() {
+	var fPrincipal = document.getElementById("myForm");
+	var texto = "";
+	var txtTemp = "";
+	for (var i = 0; i < fPrincipal.elements.length-1; i++) {
+		txtTemp = retornaValor(fPrincipal.elements[i]);
+		if (txtTemp != "") {
+			if (i != fPrincipal.elements.length-2) {
+				texto += txtTemp + ", ";
+			} else {
+				texto += txtTemp + ".";
+			}
+			txtTemp = "";
+		}
+	}
+	document.getElementById("paragraf").innerHTML = "Continguts dels diferents camps: " + texto;
+	return false;
+}
+
+</script>
+</head>
+<body>
+	<form name="myForm" id="myForm" onsubmit="return validateForm()" method="post">
+		Name: <input type="text" name="fname" value="Sergi"><br>
+		<textarea rows="4" cols="50">Text del text area.</textarea><br>
+		<input type="radio" name="sex" value="male">Male<br>
+		<input type="radio" name="sex" value="female">Female<br>
+		<input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
+	   <input type="checkbox" name="vehicle" value="Car" checked> I have a car<br>
+	   <select>
+		  <option value="volvo">Volvo</option>
+		  <option value="saab">Saab</option>
+		  <option value="mercedes">Mercedes</option>
+		  <option value="audi">Audi</option>
+		</select><br>
+		<input type="submit" value="Submit">
+	</form>
+	<p id="paragraf">Continguts dels diferents camps: </p>
+</body>
+</html>

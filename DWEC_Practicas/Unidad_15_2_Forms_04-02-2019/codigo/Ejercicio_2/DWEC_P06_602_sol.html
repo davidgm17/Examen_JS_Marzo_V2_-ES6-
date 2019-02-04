@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DWEC_P06 Exercici 2</title>
+<script type="text/javascript">
+window.onload = function() {
+	actualizaInfo(150);
+}
+function limita(elEvento, maximoCaracteres) {
+  var elemento = document.getElementById("myTextArea");
+
+  // Obtener la tecla pulsada 
+  var evento = elEvento || window.event;
+  var codigoCaracter = evento.charCode || evento.keyCode;
+  // Permitir utilizar las teclas con flecha horizontal
+  if(codigoCaracter == 37 || codigoCaracter == 38 || codigoCaracter == 39 || codigoCaracter == 40) {
+    return true;
+  }
+
+  // Permitir borrar con la tecla Backspace y con la tecla Supr.
+  if(codigoCaracter == 8 || codigoCaracter == 46) {
+    return true;
+  }
+  else if(elemento.value.length >= maximoCaracteres ) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function actualizaInfo(maximoCaracteres) {
+  var elemento = document.getElementById("myTextArea");
+  var info = document.getElementById("info");
+
+  if(elemento.value.length >= maximoCaracteres ) {
+    info.innerHTML = "Ha arribat al m&agrave;xim de "+maximoCaracteres+" car&agrave;cters.";
+  }
+  else {
+    info.innerHTML = "Pots escriure "+(maximoCaracteres-elemento.value.length)+" car&agrave;cters m&eacute;s.";
+  }
+}
+</script>
+</head>
+<body>
+
+		<textarea id="myTextArea" rows="4" cols="50" onkeypress="return limita(event, 150);" onkeyup="actualizaInfo(150)" ></textarea><br>
+
+	<p id="info"></p>
+</body>
+</html>
