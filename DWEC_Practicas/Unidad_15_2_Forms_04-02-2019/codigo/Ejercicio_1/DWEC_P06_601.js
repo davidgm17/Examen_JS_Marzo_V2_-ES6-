@@ -46,4 +46,11 @@ function ejecutar() {
   rellenaHTML(salidaString);
 }
 
-export { ejecutar };
+// export { ejecutar };
+
+window.onload = function() {
+  document.getElementById('myForm').onsubmit = function() {
+    ejecutar();
+    return false;
+  };
+};
