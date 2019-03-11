@@ -166,6 +166,11 @@ var getTituloRifa = function (nombreObjeto) {
     return titulo;
 }
 /** 
+ * Con esta funcion mi codigoo seria mas open-code  el problema 
+ * que he tenido ha sio filtrar los atributos que quiero mostrar
+ * , porque siempre me cogía la url del logo
+ * por eso he decidido no perder tiempo y continuar con la siguiente funcion
+ * 
 var getInfoRifa = function (object) {
     let infoContainer = document.createElement("div");
 
@@ -303,18 +308,7 @@ var updateStorage = function (nombreTienda) {
     }
 }
 
-/** 
-    "Antonia Milano": {
-        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",
-        "country": "Italy",
-        "purchase": "Online Raffle",
-        "collection": "Postage Available",
-        "Sizes": "4 to 12 US",
-        "Opens": "live",
-        "Closes": "06/03 @ 11AM CET",
-        "url": "https://www.antonia.it/164-shoes"
-    },
- */
+
 
 var getAllRifas = function (object, place) {
     place.className = "row d-wrap m-auto"
