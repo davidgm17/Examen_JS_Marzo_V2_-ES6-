@@ -11,15 +11,15 @@ html {
 }
 
 .bg-verde {
-    background-color: green;
+    background-color: green !important;
 }
 
 .bg-rojo {
-    background-color: red;
+    background-color: red !important;
 }
 
 .bg-gris {
-    background-color: gray;
+    background-color: gray !important;
 }
 
 .logoStyle {

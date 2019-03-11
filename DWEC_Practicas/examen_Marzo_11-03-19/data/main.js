@@ -105,7 +105,7 @@ var raffles = {
 
 var contenedorZapatilla;
 var contendorRifas;
-
+var fitros = {};
 
 /** Generamos el contenedor de datos de la zapatilla */
 
@@ -157,6 +157,7 @@ var getDatosRifa = function (object, nombreObjeto) {
     let datosContainer = document.createElement("div");
     datosContainer.className = "w-75 m-auto text-center";
     datosContainer.appendChild(getTituloRifa(nombreObjeto));
+    datosContainer.appendChild(getInfoRifa(object));
     return datosContainer;
 }
 
@@ -165,23 +166,102 @@ var getTituloRifa = function (nombreObjeto) {
     titulo.textContent = nombreObjeto;
     return titulo;
 }
+/** 
+var getInfoRifa = function (object) {
+    let infoContainer = document.createElement("div");
 
 
-var getAllRifas = function (object, place) {
-    let numeroRifas = Object.values(object).length;
-    let listaObjetosRifa = Object.values(object);
-    let listaNombresRifa = Object.getOwnPropertyNames(object)
-    for (let index = 0; index < numeroRifas; index++) {
-        if (listaNombresRifa[index] != "length") {
-            console.log(listaNombresRifa[index]);
-            console.log(listaObjetosRifa[index]);
-            place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
-        }
-    }
+    infoContainer.className = "w-100 text-center";
+    Object.values(object).forEach(element => {
+
+        
+        let span = document.createElement("span");
+        span.textContent = element;
+        infoContainer.appendChild(span);
+        let br = document.createElement("br");
+        infoContainer.appendChild(br);
+    })
+
+    return infoContainer;
 }
+*/
+
+var getInfoRifa = function (object) {
+    let infoContainer = document.createElement("div");
 
 
+    infoContainer.className = "w-100 text-center";
 
+    Object.values(object).forEach(element => {
+        fitros["element"];
+    });
+    infoContainer.appendChild(getSpan(object.country));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getSpan(object.purchase));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getSpan(object.collection));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getSpanSize(object.Sizes));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getSpanOpens(object.opens));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getSpanClose(object.Closes));
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getButton(object));
+
+    return infoContainer;
+}
+var getSpan = function (value) {
+    let span = document.createElement("span");
+    span.textContent = value;
+    return span;
+}
+var getSpanSize = function (value) {
+    let span = document.createElement("span");
+    span.textContent = "Size - " + value;
+    return span;
+}
+var getSpanOpens = function (value) {
+    let span = document.createElement("span");
+    span.textContent = "Opens - " + value;
+    return span;
+}
+var getSpanClose = function (value) {
+    let span = document.createElement("span");
+    span.textContent = "Closes - " + value;
+    return span;
+}
+var getBr = function () {
+    let br = document.createElement("br");
+    return br;
+}
+var getButton = function (object) {
+    let enlace = document.createElement("a");
+    enlace.href = object.url;
+    let button = document.createElement("button");
+
+
+    switch (object.Opens) {
+        case 'live':
+
+            if (object.Closes == "closed") {
+                button.className = "btn btn-rounded bg-rojo ";
+                button.innerText = "CLOSED";
+            } else {
+                button.className = "btn btn-rounded bg-verde";
+                button.innerText = "ENTER RAFFLE";
+
+            }
+
+            break;
+        case 'announced':
+            button.className = "btn btn-rounded bg-gris";
+            button.innerText = "ANNOUNCED";
+            break;
+    }
+    enlace.appendChild(button);
+    return enlace;
+}
 /** 
     "Antonia Milano": {
         "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",
@@ -195,6 +275,21 @@ var getAllRifas = function (object, place) {
     },
  */
 
+var getAllRifas = function (object, place) {
+    place.className = "row d-wrap"
+    let numeroRifas = Object.values(object).length;
+    let listaObjetosRifa = Object.values(object);
+    let listaNombresRifa = Object.getOwnPropertyNames(object);
+    for (let index = 0; index < numeroRifas; index++) {
+        if (listaNombresRifa[index] != "length") {
+            place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
+        }
+    }
+}
+
+
+
+
 
 window.onload = function () {
     /** Localizamos los contenedores de los datos */
@@ -203,6 +298,7 @@ window.onload = function () {
     loadZapatilla(shoe, contenedorZapatilla);
     getAllRifas(raffles, contendorRifas);
 
+    console.log(filtros);
 
 
 
