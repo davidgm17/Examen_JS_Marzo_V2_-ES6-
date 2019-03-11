@@ -107,7 +107,7 @@ var contenedorZapatilla;
 var contendorRifas;
 
 
-
+/** Generamos el contenedor de datos de la zapatilla */
 
 var loadZapatilla = function (object, place) {
     /** añadimos dinamicamente mas atributos al div */
@@ -133,11 +133,67 @@ var getSubtitle = function (object) {
 var getDescription = function (object) {
     let description = document.createElement("h3");
     description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
-    console.log(description);
-
     return description;
 }
 
+
+/** Generamos el contenedor de una rifa */
+var createRifa = function (object, nombreObjeto) {
+    let rifaContainer = document.createElement("div");
+    rifaContainer.className = "col-4 row";
+    rifaContainer.appendChild(getLogo(object));
+    rifaContainer.appendChild(getDatosRifa(object, nombreObjeto));
+    return rifaContainer;
+}
+
+var getLogo = function (object) {
+    let logoC = document.createElement("img");
+    logoC.src = object.logo;
+    logoC.className = "logoStyle";
+    return logoC;
+}
+
+var getDatosRifa = function (object, nombreObjeto) {
+    let datosContainer = document.createElement("div");
+    datosContainer.className = "w-75 m-auto text-center";
+    datosContainer.appendChild(getTituloRifa(nombreObjeto));
+    return datosContainer;
+}
+
+var getTituloRifa = function (nombreObjeto) {
+    let titulo = document.createElement("h4");
+    titulo.textContent = nombreObjeto;
+    return titulo;
+}
+
+
+var getAllRifas = function (object, place) {
+    let numeroRifas = Object.values(object).length;
+    let listaObjetosRifa = Object.values(object);
+    let listaNombresRifa = Object.getOwnPropertyNames(object)
+    for (let index = 0; index < numeroRifas; index++) {
+        if (listaNombresRifa[index] != "length") {
+            console.log(listaNombresRifa[index]);
+            console.log(listaObjetosRifa[index]);
+            place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
+        }
+    }
+}
+
+
+
+/** 
+    "Antonia Milano": {
+        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",
+        "country": "Italy",
+        "purchase": "Online Raffle",
+        "collection": "Postage Available",
+        "Sizes": "4 to 12 US",
+        "Opens": "live",
+        "Closes": "06/03 @ 11AM CET",
+        "url": "https://www.antonia.it/164-shoes"
+    },
+ */
 
 
 window.onload = function () {
@@ -145,4 +201,9 @@ window.onload = function () {
     contenedorZapatilla = document.getElementById("datosZapa");
     contendorRifas = document.getElementById("contendorRifas");
     loadZapatilla(shoe, contenedorZapatilla);
+    getAllRifas(raffles, contendorRifas);
+
+
+
+
 }

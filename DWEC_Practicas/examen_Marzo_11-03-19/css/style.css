@@ -9,3 +9,20 @@ html {
 .rigth {
     text-align: right;
 }
+
+.bg-verde {
+    background-color: green;
+}
+
+.bg-rojo {
+    background-color: red;
+}
+
+.bg-gris {
+    background-color: gray;
+}
+
+.logoStyle {
+    width: 100%;
+    align-content: center;
+}
