@@ -81,7 +81,7 @@ var raffles = {
     },
 
     "Solebox": {
-        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/SoleBox.jpg'git",
+        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/SoleBox.jpg",
         "country": "Germany",
         "purchase": "In-Store/Online",
         "collection": "Post and Collect",
@@ -155,7 +155,7 @@ var getDatosRifa = function (object, nombreObjeto) {
     let datosContainer = document.createElement("div");
     datosContainer.className = "w-75 m-auto text-center";
     datosContainer.appendChild(getTituloRifa(nombreObjeto));
-    datosContainer.appendChild(getInfoRifa(object));
+    datosContainer.appendChild(getInfoRifa(object, nombreObjeto));
     return datosContainer;
 }
 
@@ -185,7 +185,7 @@ var getInfoRifa = function (object) {
 }
 */
 
-var getInfoRifa = function (object) {
+var getInfoRifa = function (object, nombreObjeto) {
     let infoContainer = document.createElement("div");
 
 
@@ -207,7 +207,8 @@ var getInfoRifa = function (object) {
     infoContainer.appendChild(getSpanClose(object.Closes));
     infoContainer.appendChild(getBr());
     infoContainer.appendChild(getButton(object));
-
+    infoContainer.appendChild(getBr());
+    infoContainer.appendChild(getButtonEntered(nombreObjeto));
     return infoContainer;
 }
 var getSpan = function (value) {
@@ -234,6 +235,9 @@ var getBr = function () {
     let br = document.createElement("br");
     return br;
 }
+/**
+ * Creo el boton y añado para capturar evento over
+ */
 var getButton = function (object) {
     let enlace = document.createElement("a");
     enlace.href = object.url;
@@ -254,9 +258,7 @@ var getButton = function (object) {
             } else {
                 button.className = "btn btn-rounded bg-verde";
                 button.innerText = "ENTER RAFFLE";
-
             }
-
             break;
         case 'announced':
             button.className = "btn btn-rounded bg-gris";
@@ -266,6 +268,41 @@ var getButton = function (object) {
     enlace.appendChild(button);
     return enlace;
 }
+
+/**
+ * creo  boton entered y capturo el evento para guardarlo en local storage
+ */
+
+var getButtonEntered = function (nombreTienda) {
+    let button = document.createElement("button");
+    button.style.fontWeight = "bold";
+    button.className = "btn";
+    button.name = nombreTienda;
+    //button.addEventListener("click", updateStorage(nombreTienda), true);
+    button.onclick = updateStorage(button.name);
+    if ((localStorage.getItem(nombreTienda)) && (localStorage.getItem(nombreTienda) == "true")) {
+        button.innerText = "Entered";
+
+    } else {
+        button.innerText = "Mark as Entered";
+        localStorage.setItem(nombreTienda, false);
+    }
+    return button;
+}
+
+var updateStorage = function (nombreTienda) {
+    let nombre = nombreTienda;
+    console.log(nombre);
+    if ((localStorage.getItem(nombre)) && (localStorage.getItem(nombre) == "true")) {
+
+        localStorage.setItem(nombre, false);
+        this.innerText = "Mark as Entered";
+    } else {
+        localStorage.setItem(nombre, true);
+        this.innerText = "Entered";
+    }
+}
+
 /** 
     "Antonia Milano": {
         "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",
