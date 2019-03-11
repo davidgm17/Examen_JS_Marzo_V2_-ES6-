@@ -103,9 +103,7 @@ var raffles = {
 /* var repositorio = require('raffles');*/
 
 
-var contenedorZapatilla;
-var contendorRifas;
-var fitros = {};
+
 
 /** Generamos el contenedor de datos de la zapatilla */
 
@@ -164,6 +162,7 @@ var getDatosRifa = function (object, nombreObjeto) {
 var getTituloRifa = function (nombreObjeto) {
     let titulo = document.createElement("h4");
     titulo.textContent = nombreObjeto;
+    titulo.style.fontWeight = "bold";
     return titulo;
 }
 /** 
@@ -193,7 +192,7 @@ var getInfoRifa = function (object) {
     infoContainer.className = "w-100 text-center";
 
     Object.values(object).forEach(element => {
-        fitros["element"];
+        fitros["element"] = element;
     });
     infoContainer.appendChild(getSpan(object.country));
     infoContainer.appendChild(getBr());
@@ -240,7 +239,12 @@ var getButton = function (object) {
     enlace.href = object.url;
     let button = document.createElement("button");
 
-
+    button.addEventListener("mouseover", function () {
+        button.style.opacity = "0.5"
+    });
+    button.addEventListener("mouseout", function () {
+        button.style.opacity = "1"
+    });
     switch (object.Opens) {
         case 'live':
 
@@ -276,7 +280,7 @@ var getButton = function (object) {
  */
 
 var getAllRifas = function (object, place) {
-    place.className = "row d-wrap"
+    place.className = "row d-wrap m-auto"
     let numeroRifas = Object.values(object).length;
     let listaObjetosRifa = Object.values(object);
     let listaNombresRifa = Object.getOwnPropertyNames(object);
@@ -290,15 +294,19 @@ var getAllRifas = function (object, place) {
 
 
 
+var contenedorZapatilla;
+var contendorRifas;
+var fitros = {};
 
 window.onload = function () {
     /** Localizamos los contenedores de los datos */
     contenedorZapatilla = document.getElementById("datosZapa");
     contendorRifas = document.getElementById("contendorRifas");
+
     loadZapatilla(shoe, contenedorZapatilla);
     getAllRifas(raffles, contendorRifas);
 
-    console.log(filtros);
+    //console.log(filtros);
 
 
 
