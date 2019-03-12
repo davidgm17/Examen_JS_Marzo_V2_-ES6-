@@ -278,13 +278,14 @@ var getButton = function (object) {
  * creo  boton entered y capturo el evento para guardarlo en local storage
  */
 
-var getButtonEntered = function (nombreTienda) {
+var getButtonEntered = function(nombreTienda) {
     let button = document.createElement("button");
     button.style.fontWeight = "bold";
     button.className = "btn";
+    button.id = nombreTienda;
     button.name = nombreTienda;
-    //button.addEventListener("click", updateStorage(nombreTienda), true);
-    button.onclick = updateStorage(button.name);
+    button.addEventListener("click", function() { updateStorage(nombreTienda); }, true);
+    //button.onclick = updateStorage(button.name);
     if ((localStorage.getItem(nombreTienda)) && (localStorage.getItem(nombreTienda) == "true")) {
         button.innerText = "Entered";
 
@@ -295,16 +296,18 @@ var getButtonEntered = function (nombreTienda) {
     return button;
 }
 
-var updateStorage = function (nombreTienda) {
+var updateStorage = function(nombreTienda) {
     let nombre = nombreTienda;
     console.log(nombre);
     if ((localStorage.getItem(nombre)) && (localStorage.getItem(nombre) == "true")) {
 
         localStorage.setItem(nombre, false);
-        this.innerText = "Mark as Entered";
+        let boton = document.getElementById(nombre);
+        boton.innerText = "Mark as Entered";
     } else {
         localStorage.setItem(nombre, true);
-        this.innerText = "Entered";
+        let boton = document.getElementById(nombre);
+        boton.innerText = "Entered";
     }
 }
 
