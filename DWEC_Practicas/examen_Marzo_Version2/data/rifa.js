@@ -5,10 +5,9 @@ class RifaDTO {
         let propiedades = Object.keys(object);
         propiedades.forEach(propiedad => {
             if (object[propiedad].includes("http")) {
-                this.getPropertyURL(propiedad, object[propiedad]);
+                getPropertyURL(propiedad, object[propiedad]);
             } else {
                 this[propiedad] = object[propiedad];
-                if (propiedad.includes("Size")) {}
                 objectString += updateToString(propiedad, this[propiedad]);
             }
         });
@@ -22,54 +21,52 @@ class RifaDTO {
         }
     };
 
-    /**
-     *
-     *
-     * @param { String } propiedad
-     * @param {String} valueURL
-     * @memberof RifaDTO
-     */
-    getPropertyURL(propiedad, valueURL) {
 
 
-        if (propiedad in this) {
-            RifaDTO[propiedad] = valueURL;
-        } else {
-            /** 
-             * El problema es que al exportar este objeto 
-             * las propiedades no enumerables , no son visibles.
-             * 
-            Object.defineProperty(RifaDTO, propiedad, {
-                 value: valueURL,
-                 writable: true,
-                 enumerable: false,
-                 configurable: true
-             });*/
+};
 
-            /** 
-              * genero funcion get del atributo, el problema 
-              * es que tmapoco es visible en documento donde se importa
-              * 
-            Oject.defineProperty(RifaDTO, propiedad, {
-                get: function() { return valueURL; }
-            });
-            */
+/**
+ *
+ *
+ * @param { String } propiedad
+ * @param {String} valueURL
+ * @memberof RifaDTO
+ */
+getPropertyURL(propiedad, valueURL) {
 
 
-            let generaGet = 'get' + getCapitalize(propiedad);
-            /*RifaDTO[generaGet] = function() {
-                return valueURL;
-            };*/
+    if (propiedad in this) {
+        RifaDTO[propiedad] = valueURL;
+    } else {
+        /** 
+         * El problema es que al exportar este objeto 
+         * las propiedades no enumerables , no son visibles.
+         * 
+        Object.defineProperty(RifaDTO, propiedad, {
+             value: valueURL,
+             writable: true,
+             enumerable: false,
+             configurable: true
+         });*/
 
+        /** 
+          * genero funcion get del atributo, el problema 
+          * es que tmapoco es visible en documento donde se importa
+          * 
+        Oject.defineProperty(RifaDTO, propiedad, {
+            get: function() { return valueURL; }
+        });
+        */
 
+        let generaGet = 'get' + getCapitalize(propiedad);
+        /*RifaDTO[generaGet] = function() {
+            return valueURL;
+        };*/
 
-            RifaDTO.prototype[generaGet] = valueURL;
+        RifaDTO.prototype[generaGet] = valueURL;
 
-        }
-    };
-
-
-}
+    }
+};
 let updateToString = function(propiedad, valor) {
     if (propiedad.includes('Size')) {
         return '\n Size - ' + valor;
@@ -85,7 +82,7 @@ let updateToString = function(propiedad, valor) {
 };
 
 let getCapitalize = function(palabra) {
-    let output = palabra[0].toUpperCase() + palabra.slice(1);
+    let output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
     return output;
 };
 module.exports = RifaDTO;

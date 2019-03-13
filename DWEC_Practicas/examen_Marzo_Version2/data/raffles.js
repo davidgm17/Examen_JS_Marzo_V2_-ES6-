@@ -1,4 +1,4 @@
-var shoe = {
+export var shoe = {
     "model": "Sacai x Nike LDV Waffle",
     "colour": "Varsity Blue/Del Sol/Varsity Red",
     "code": "BV0073-400",
@@ -6,7 +6,7 @@ var shoe = {
     "price": "180$"
 };
 
-var raffles = {
+export var raffles = {
 
     "Antonia Milano": {
         "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",

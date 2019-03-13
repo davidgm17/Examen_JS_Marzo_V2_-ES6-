@@ -1,4 +1,4 @@
-var htmlConstructor = {
+export var htmlConstructor = {
 
     loadZapatilla: function(object, place) {
         /** añadimos dinamicamente mas atributos al div */
@@ -11,22 +11,7 @@ var htmlConstructor = {
 
     },
 
-    getTitulo: function(object) {
-        let titulo = document.createElement("h1");
-        titulo.textContent = object.model;
-        return titulo;
-    },
 
-    getSubtitle: function(object) {
-        let subtitle = document.createElement("h2");
-        subtitle.textContent = object.colour;
-        return subtitle;
-    },
-    getDescription: function(object) {
-        let description = document.createElement("h3");
-        description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
-        return description;
-    },
 
 
     /** Generamos el contenedor de una rifa */
@@ -192,6 +177,20 @@ var htmlConstructor = {
         return button;
     }
 
-}
+};
+let getTitulo = function(object) {
+    let titulo = document.createElement("h1");
+    titulo.textContent = object.model;
+    return titulo;
+};
 
-module.exports = htmlConstructor;
+let getSubtitle = function(object) {
+    let subtitle = document.createElement("h2");
+    subtitle.textContent = object.colour;
+    return subtitle;
+};
+let getDescription = function(object) {
+    let description = document.createElement("h3");
+    description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
+    return description;
+};

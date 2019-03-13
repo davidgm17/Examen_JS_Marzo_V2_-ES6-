@@ -118,6 +118,12 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"data/raffles.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.raffles = exports.shoe = void 0;
 var shoe = {
   "model": "Sacai x Nike LDV Waffle",
   "colour": "Varsity Blue/Del Sol/Varsity Red",
@@ -125,6 +131,7 @@ var shoe = {
   "avaliable": "07/03/19",
   "price": "180$"
 };
+exports.shoe = shoe;
 var raffles = {
   "Antonia Milano": {
     "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/AntoniaMilano.jpg",
@@ -197,6 +204,7 @@ var raffles = {
     "url": "https://www.solebox.com/en/Footwear/"
   }
 };
+exports.raffles = raffles;
 exports.sole = {
   "shoe": shoe,
   "raffles": raffles
@@ -263,9 +271,6 @@ function () {
         _this.getPropertyURL(propiedad, object[propiedad]);
       } else {
         _this[propiedad] = object[propiedad];
-
-        if (propiedad.includes("Size")) {}
-
         objectString += updateToString(propiedad, _this[propiedad]);
       }
     });
@@ -340,12 +345,18 @@ var updateToString = function updateToString(propiedad, valor) {
 };
 
 var getCapitalize = function getCapitalize(palabra) {
-  var output = palabra[0].toUpperCase() + palabra.slice(1);
+  var output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
   return output;
 };
 
 module.exports = RifaDTO;
 },{}],"data/htmlContructor.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.htmlConstructor = void 0;
 var htmlConstructor = {
   loadZapatilla: function loadZapatilla(object, place) {
     /** añadimos dinamicamente mas atributos al div */
@@ -355,21 +366,6 @@ var htmlConstructor = {
     place.appendChild(getTitulo(object));
     place.appendChild(getSubtitle(object));
     place.appendChild(getDescription(object));
-  },
-  getTitulo: function getTitulo(object) {
-    var titulo = document.createElement("h1");
-    titulo.textContent = object.model;
-    return titulo;
-  },
-  getSubtitle: function getSubtitle(object) {
-    var subtitle = document.createElement("h2");
-    subtitle.textContent = object.colour;
-    return subtitle;
-  },
-  getDescription: function getDescription(object) {
-    var description = document.createElement("h3");
-    description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
-    return description;
   },
 
   /** Generamos el contenedor de una rifa */
@@ -531,7 +527,25 @@ var htmlConstructor = {
     return button;
   }
 };
-module.exports = htmlConstructor;
+exports.htmlConstructor = htmlConstructor;
+
+var getTitulo = function getTitulo(object) {
+  var titulo = document.createElement("h1");
+  titulo.textContent = object.model;
+  return titulo;
+};
+
+var getSubtitle = function getSubtitle(object) {
+  var subtitle = document.createElement("h2");
+  subtitle.textContent = object.colour;
+  return subtitle;
+};
+
+var getDescription = function getDescription(object) {
+  var description = document.createElement("h3");
+  description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
+  return description;
+};
 },{}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
@@ -609,13 +623,13 @@ module.hot.accept(reloadCSS);
 
 var _shoe = require("./shoe");
 
+var _htmlContructor = require("./htmlContructor");
+
 require("../css/style.css");
 
 var datasource = require('./raffles');
 
 var RifaDto = require('./rifa');
-
-var htmlConstructor = require('./htmlContructor');
 
 /**
  * Logica que se  implementa
@@ -866,6 +880,7 @@ window.onload = function () {
   console.log(rifa.getUrl);
   var shoe = new _shoe.ShoeDTO(datasource.sole.shoe);
   console.log(shoe);
+  console.log(_htmlContructor.htmlConstructor);
 };
 },{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./rifa":"data/rifa.js","./htmlContructor":"data/htmlContructor.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -895,7 +910,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54471" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57584" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

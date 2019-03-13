@@ -4,7 +4,8 @@ import {
 } from './shoe';
 
 var RifaDto = require('./rifa');
-var htmlConstructor = require('./htmlContructor');
+import { htmlConstructor } from './htmlContructor';
+
 import "../css/style.css";
 
 
@@ -261,8 +262,7 @@ window.onload = function() {
     console.log(rifa.getUrl);
     let shoe = new ShoeDTO(datasource.sole.shoe);
     console.log(shoe);
+    console.log(htmlConstructor);
 
 
-
-
-}
+};
