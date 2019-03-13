@@ -251,84 +251,74 @@ exports.ShoeDTO = ShoeDTO;
 },{}],"data/rifa.js":[function(require,module,exports) {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var RifaDTO = function RifaDTO(object, nombre) {
+  var _this = this;
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  _classCallCheck(this, RifaDTO);
 
-var RifaDTO =
-/*#__PURE__*/
-function () {
-  function RifaDTO(object, nombre) {
-    var _this = this;
+  this.name = nombre || "";
+  var objectString = this.name;
+  var propiedades = Object.keys(object);
+  propiedades.forEach(function (propiedad) {
+    if (object[propiedad].includes("http")) {
+      getPropertyURL(propiedad, object[propiedad]);
+    } else {
+      _this[propiedad] = object[propiedad];
+      objectString += updateToString(propiedad, _this[propiedad]);
+    }
+  });
+  /**
+   * Creo el toString de forma dinamica con todas las propiedades que no 
+   * son "http..."
+   */
 
-    _classCallCheck(this, RifaDTO);
+  this.toString = function () {
+    return objectString;
+  };
+};
 
-    this.name = nombre || "";
-    var objectString = this.name;
-    var propiedades = Object.keys(object);
-    propiedades.forEach(function (propiedad) {
-      if (object[propiedad].includes("http")) {
-        _this.getPropertyURL(propiedad, object[propiedad]);
-      } else {
-        _this[propiedad] = object[propiedad];
-        objectString += updateToString(propiedad, _this[propiedad]);
-      }
+;
+/**
+ *
+ *
+ * @param { String } propiedad
+ * @param {String} valueURL
+ * @memberof RifaDTO
+ */
+
+var getPropertyURL = function getPropertyURL(propiedad, valueURL) {
+  if (propiedad in this) {
+    RifaDTO[propiedad] = valueURL;
+  } else {
+    /** 
+     * El problema es que al exportar este objeto 
+     * las propiedades no enumerables , no son visibles.
+     * 
+    Object.defineProperty(RifaDTO, propiedad, {
+         value: valueURL,
+         writable: true,
+         enumerable: false,
+         configurable: true
+     });*/
+
+    /** 
+      * genero funcion get del atributo, el problema 
+      * es que tmapoco es visible en documento donde se importa
+      * 
+    Oject.defineProperty(RifaDTO, propiedad, {
+        get: function() { return valueURL; }
     });
-    /**
-     * Creo el toString de forma dinamica con todas las propiedades que no 
-     * son "http..."
-     */
+    */
+    var generaGet = 'get' + getCapitalize(propiedad);
+    /*RifaDTO[generaGet] = function() {
+        return valueURL;
+    };*/
 
-    this.toString = function () {
-      return objectString;
-    };
+    RifaDTO.prototype[generaGet] = valueURL;
   }
 
-  _createClass(RifaDTO, [{
-    key: "getPropertyURL",
-
-    /**
-     *
-     *
-     * @param { String } propiedad
-     * @param {String} valueURL
-     * @memberof RifaDTO
-     */
-    value: function getPropertyURL(propiedad, valueURL) {
-      if (propiedad in this) {
-        RifaDTO[propiedad] = valueURL;
-      } else {
-        /** 
-         * El problema es que al exportar este objeto 
-         * las propiedades no enumerables , no son visibles.
-         * 
-        Object.defineProperty(RifaDTO, propiedad, {
-             value: valueURL,
-             writable: true,
-             enumerable: false,
-             configurable: true
-         });*/
-
-        /** 
-          * genero funcion get del atributo, el problema 
-          * es que tmapoco es visible en documento donde se importa
-          * 
-        Oject.defineProperty(RifaDTO, propiedad, {
-            get: function() { return valueURL; }
-        });
-        */
-        var generaGet = 'get' + getCapitalize(propiedad);
-        /*RifaDTO[generaGet] = function() {
-            return valueURL;
-        };*/
-
-        RifaDTO.prototype[generaGet] = valueURL;
-      }
-    }
-  }]);
-
-  return RifaDTO;
-}();
+  ;
+};
 
 var updateToString = function updateToString(propiedad, valor) {
   if (propiedad.includes('Size')) {

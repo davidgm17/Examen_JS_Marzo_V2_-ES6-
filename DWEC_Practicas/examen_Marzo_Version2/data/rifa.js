@@ -21,8 +21,6 @@ class RifaDTO {
         }
     };
 
-
-
 };
 
 /**
@@ -32,9 +30,7 @@ class RifaDTO {
  * @param {String} valueURL
  * @memberof RifaDTO
  */
-getPropertyURL(propiedad, valueURL) {
-
-
+let getPropertyURL = function(propiedad, valueURL) {
     if (propiedad in this) {
         RifaDTO[propiedad] = valueURL;
     } else {
@@ -64,8 +60,7 @@ getPropertyURL(propiedad, valueURL) {
         };*/
 
         RifaDTO.prototype[generaGet] = valueURL;
-
-    }
+    };
 };
 let updateToString = function(propiedad, valor) {
     if (propiedad.includes('Size')) {
