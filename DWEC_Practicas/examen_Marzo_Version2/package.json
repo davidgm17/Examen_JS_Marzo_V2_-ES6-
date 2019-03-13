@@ -1,0 +1,17 @@
+{
+  "name": "examen_Marzo_Version2",
+  "version": "1.0.0",
+  "description": "Raffle in the JSungle\r =====================\r #### Examen JS client-side DWEC Dual Febrero 2019",
+  "main": "index.js",
+  "dependencies": {
+    "cssnano": "^4.1.10",
+    "typescript": "^3.3.3333"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

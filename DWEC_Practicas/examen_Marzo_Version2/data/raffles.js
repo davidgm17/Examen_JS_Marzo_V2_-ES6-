@@ -75,7 +75,7 @@ var raffles = {
     },
 
     "Solebox": {
-        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/SoleBox.jpg'git",
+        "logo": "https://www.soleretriever.com/wp-content/uploads/2018/04/SoleBox.jpg",
         "country": "Germany",
         "purchase": "In-Store/Online",
         "collection": "Post and Collect",
@@ -86,15 +86,8 @@ var raffles = {
     },
 
 };
-var sole = {
-    "shoe": shoe,
-    "raffles": raffles
-};
-module.exports = sole;
 
-/*
 exports.sole = {
     "shoe": shoe,
     "raffles": raffles
 };
-*/
