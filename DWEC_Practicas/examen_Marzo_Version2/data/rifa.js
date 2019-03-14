@@ -1,6 +1,8 @@
-class RifaDTO {
+import { Filters } from './main';
+export class RifaDTO {
     constructor(object, nombre) {
         this.name = nombre || "";
+        this.filtros = new Set();
         let objectString = this.name;
         let propiedades = Object.keys(object);
         propiedades.forEach(propiedad => {
@@ -9,6 +11,7 @@ class RifaDTO {
             } else {
                 this[propiedad] = object[propiedad];
                 objectString += updateToString(propiedad, this[propiedad]);
+                Filters.addFilterProperty(propiedad, this[propiedad]);
             }
         });
 
@@ -22,6 +25,7 @@ class RifaDTO {
     };
 
 };
+
 
 /**
  *
@@ -80,4 +84,3 @@ let getCapitalize = function(palabra) {
     let output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
     return output;
 };
-module.exports = RifaDTO;

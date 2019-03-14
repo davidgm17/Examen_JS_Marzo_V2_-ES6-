@@ -3,7 +3,6 @@ export var htmlConstructor = {
     loadZapatilla: function(object, place) {
         /** añadimos dinamicamente mas atributos al div */
         place.className += " rigth";
-
         /** Cargamos los datos de la zapatilla */
         place.appendChild(getTitulo(object));
         place.appendChild(getSubtitle(object));
