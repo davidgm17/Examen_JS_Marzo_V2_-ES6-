@@ -1,13 +1,20 @@
-import { Filters } from './main';
+import {
+    Filters
+} from './main';
 export class RifaDTO {
-    constructor(object, nombre) {
-        this.name = nombre || "";
+    constructor(object, nombreIn) {
+        this.nombre = nombreIn || "";
         this.filtros = new Set();
-        let objectString = this.name;
+        let objectString = "";
         let propiedades = Object.keys(object);
         propiedades.forEach(propiedad => {
             if (object[propiedad].includes("http")) {
-                getPropertyURL(propiedad, object[propiedad]);
+                let generaGet = 'get' + getCapitalize(propiedad);
+                this[generaGet] = function() {
+                    return object[propiedad];
+                };
+
+                //getPropertyURL(propiedad, object[propiedad]);
             } else {
                 this[propiedad] = object[propiedad];
                 objectString += updateToString(propiedad, this[propiedad]);
@@ -35,8 +42,9 @@ export class RifaDTO {
  * @memberof RifaDTO
  */
 let getPropertyURL = function(propiedad, valueURL) {
+    let generaGet = 'get' + getCapitalize(propiedad);
     if (propiedad in RifaDTO) {
-        RifaDTO[propiedad] = valueURL;
+        RifaDTO[generaGet] = valueURL;
     } else {
         /** 
          * El problema es que al exportar este objeto 
@@ -58,12 +66,14 @@ let getPropertyURL = function(propiedad, valueURL) {
         });
         */
 
-        let generaGet = 'get' + getCapitalize(propiedad);
+
         /*RifaDTO[generaGet] = function() {
             return valueURL;
         };*/
 
-        RifaDTO.prototype[generaGet] = valueURL;
+        RifaDTO[generaGet] = function() {
+            return valueURL;
+        }
     };
 };
 let updateToString = function(propiedad, valor) {

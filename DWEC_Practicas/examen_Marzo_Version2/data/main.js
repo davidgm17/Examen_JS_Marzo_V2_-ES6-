@@ -6,10 +6,7 @@ import {
     ShoeDTO
 } from './shoe';
 import {
-    RifaDTO as Rifa
-} from './rifa';
-import {
-    htmlConstructor
+    singletonHtml as htmlContructor
 } from './htmlContructor';
 import {
     singletonFilter
@@ -17,11 +14,12 @@ import {
 import {
     singletonPgWeb
 } from './pgWeb';
-import "../css/style.css";
+import classes from "../css/style.css";
+
 
 export let Filters = singletonFilter().get();
 var paginaObject = singletonPgWeb().get();
-
+var toHtml = htmlContructor().get();
 
 
 
@@ -40,7 +38,10 @@ window.onload = function() {
     //Object.assign(paginaObject.filtros, Filters);
     console.log(paginaObject);
     console.log(Filters);
-    window.alert('mirar en la consola ,pulsa F12');
+    //window.alert('mirar en la consola ,pulsa F12');
 
-
+    // Poblamos el html.
+    console.log(toHtml);
+    toHtml.loadZapatilla(paginaObject.shoe, contenedorZapatilla);
+    toHtml.loadAllRifas(paginaObject.listaRifas, contendorRifas);
 };

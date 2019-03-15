@@ -4,6 +4,7 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: #efefef;
 }
 
 .rigth {
@@ -23,8 +24,12 @@ html {
 }
 
 .logoStyle {
-    width: 100%;
     align-content: center;
+}
+
+.cabecera {
+    top: 0;
+    height: 50px;
 }
 
 /*# sourceMappingURL=/main.61515f62.css.map */

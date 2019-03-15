@@ -222,148 +222,28 @@ exports.ShoeDTO = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var ShoeDTO = function ShoeDTO(object) {
+  _classCallCheck(this, ShoeDTO);
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ShoeDTO =
-/*#__PURE__*/
-function () {
-  function ShoeDTO(object) {
-    _classCallCheck(this, ShoeDTO);
-
-    this.model = object.model;
-    this.colour = object.model;
-    this.code = object.model;
-    this.avaliable = object.avaliable;
-    this.price = object.price;
+  for (var propiedad in object) {
+    this[propiedad] = object[propiedad];
   }
-
-  _createClass(ShoeDTO, [{
-    key: "jsonToShoeDTO",
-    value: function jsonToShoeDTO() {
-      console.log('Te voy a parsear');
-    }
-  }]);
-
-  return ShoeDTO;
-}();
+};
 
 exports.ShoeDTO = ShoeDTO;
 ;
-},{}],"data/rifa.js":[function(require,module,exports) {
+},{}],"data/htmlContructor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RifaDTO = void 0;
-
-var _main = require("./main");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var RifaDTO = function RifaDTO(object, nombre) {
-  var _this = this;
-
-  _classCallCheck(this, RifaDTO);
-
-  this.name = nombre || "";
-  this.filtros = new Set();
-  var objectString = this.name;
-  var propiedades = Object.keys(object);
-  propiedades.forEach(function (propiedad) {
-    if (object[propiedad].includes("http")) {
-      getPropertyURL(propiedad, object[propiedad]);
-    } else {
-      _this[propiedad] = object[propiedad];
-      objectString += updateToString(propiedad, _this[propiedad]);
-
-      _main.Filters.addFilterProperty(propiedad, _this[propiedad]);
-    }
-  });
-  /**
-   * Creo el toString de forma dinamica con todas las propiedades que no 
-   * son "http..."
-   */
-
-  this.toString = function () {
-    return objectString;
-  };
-};
-
-exports.RifaDTO = RifaDTO;
-;
-/**
- *
- *
- * @param { String } propiedad
- * @param {String} valueURL
- * @memberof RifaDTO
- */
-
-var getPropertyURL = function getPropertyURL(propiedad, valueURL) {
-  if (propiedad in RifaDTO) {
-    RifaDTO[propiedad] = valueURL;
-  } else {
-    /** 
-     * El problema es que al exportar este objeto 
-     * las propiedades no enumerables , no son visibles.
-     * 
-    Object.defineProperty(RifaDTO, propiedad, {
-         value: valueURL,
-         writable: true,
-         enumerable: false,
-         configurable: true
-     });*/
-
-    /** 
-      * genero funcion get del atributo, el problema 
-      * es que tmapoco es visible en documento donde se importa
-      * 
-    Oject.defineProperty(RifaDTO, propiedad, {
-        get: function() { return valueURL; }
-    });
-    */
-    var generaGet = 'get' + getCapitalize(propiedad);
-    /*RifaDTO[generaGet] = function() {
-        return valueURL;
-    };*/
-
-    RifaDTO.prototype[generaGet] = valueURL;
-  }
-
-  ;
-};
-
-var updateToString = function updateToString(propiedad, valor) {
-  if (propiedad.includes('Size')) {
-    return '\n Size - ' + valor;
-  } else if (propiedad.includes('Opens')) {
-    return '\n Opens - ' + valor;
-  } else if (propiedad.includes('Closes')) {
-    return '\n Closes - ' + valor;
-  } else {
-    return '\n ' + valor;
-  }
-
-  ;
-};
-
-var getCapitalize = function getCapitalize(palabra) {
-  var output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
-  return output;
-};
-},{"./main":"data/main.js"}],"data/htmlContructor.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.htmlConstructor = void 0;
+exports.singletonHtml = singletonHtml;
 var htmlConstructor = {
   loadZapatilla: function loadZapatilla(object, place) {
+    console.log(object);
     /** añadimos dinamicamente mas atributos al div */
+
     place.className += " rigth";
     /** Cargamos los datos de la zapatilla */
 
@@ -371,185 +251,235 @@ var htmlConstructor = {
     place.appendChild(getSubtitle(object));
     place.appendChild(getDescription(object));
   },
+  loadAllRifas: function loadAllRifas(listaObjetos, place) {
+    place.className = "row d-wrap m-auto w-75";
+    /* let numeroRifas = Object.values(object).length;
+         let listaObjetosRifa = Object.values(object);
+         let listaNombresRifa = Object.getOwnPropertyNames(object);
+         for (let index = 0; index < numeroRifas; index++) {
+             if (listaNombresRifa[index] != "length") {
+                 place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
+             }
+         }*/
 
-  /** Generamos el contenedor de una rifa */
-  createRifa: function createRifa(object, nombreObjeto) {
-    var rifaContainer = document.createElement("div");
-    rifaContainer.className = "col-4 row";
-    rifaContainer.appendChild(getLogo(object));
-    rifaContainer.appendChild(getDatosRifa(object, nombreObjeto));
-    return rifaContainer;
-  },
-  getLogo: function getLogo(object) {
-    var logoC = document.createElement("img");
-    logoC.src = object.logo;
-    logoC.className = "logoStyle";
-    return logoC;
-  },
-  getDatosRifa: function getDatosRifa(object, nombreObjeto) {
-    var datosContainer = document.createElement("div");
-    datosContainer.className = "w-75 m-auto text-center";
-    datosContainer.appendChild(getTituloRifa(nombreObjeto));
-    datosContainer.appendChild(getInfoRifa(object, nombreObjeto));
-    return datosContainer;
-  },
-  getTituloRifa: function getTituloRifa(nombreObjeto) {
-    var titulo = document.createElement("h4");
-    titulo.textContent = nombreObjeto;
-    titulo.style.fontWeight = "bold";
-    return titulo;
-  },
-
-  /** 
-       * Con esta funcion mi codigoo seria mas open-code  el problema 
-       * que he tenido ha sio filtrar los atributos que quiero mostrar
-       * , porque siempre me cogía la url del logo
-       * por eso he decidido no perder tiempo y continuar con la siguiente funcion
-       * 
-      var getInfoRifa = function (object) {
-          let infoContainer = document.createElement("div");
-  
-  
-          infoContainer.className = "w-100 text-center";
-          Object.values(object).forEach(element => {
-  
-              
-              let span = document.createElement("span");
-              span.textContent = element;
-              infoContainer.appendChild(span);
-              let br = document.createElement("br");
-              infoContainer.appendChild(br);
-          })
-  
-          return infoContainer;
-      }
-      */
-  getInfoRifa: function getInfoRifa(object, nombreObjeto) {
-    var infoContainer = document.createElement("div");
-    infoContainer.className = "w-100 text-center";
-    Object.values(object).forEach(function (element) {
-      fitros["element"] = element;
+    listaObjetos.forEach(function (objeto) {
+      place.appendChild(createRifa(objeto));
     });
-    infoContainer.appendChild(getSpan(object.country));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpan(object.purchase));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpan(object.collection));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanSize(object.Sizes));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanOpens(object.opens));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanClose(object.Closes));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getButton(object));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(this.getButtonEntered(nombreObjeto));
-    return infoContainer;
-  },
-  getSpan: function getSpan(value) {
-    var span = document.createElement("span");
-    span.textContent = value;
-    return span;
-  },
-  getSpanSize: function getSpanSize(value) {
-    var span = document.createElement("span");
-    span.textContent = "Size - " + value;
-    return span;
-  },
-  getSpanOpens: function getSpanOpens(value) {
-    var span = document.createElement("span");
-    span.textContent = "Opens - " + value;
-    return span;
-  },
-  getSpanClose: function getSpanClose(value) {
-    var span = document.createElement("span");
-    span.textContent = "Closes - " + value;
-    return span;
-  },
-  getBr: function getBr() {
-    var br = document.createElement("br");
-    return br;
-  },
-
-  /**
-   * Creo el boton y añado para capturar evento over
-   */
-  getButton: function getButton(object) {
-    var enlace = document.createElement("a");
-    enlace.href = object.url;
-    var button = document.createElement("button");
-    button.addEventListener("mouseover", function () {
-      button.style.opacity = "0.5";
-    });
-    button.addEventListener("mouseout", function () {
-      button.style.opacity = "1";
-    });
-
-    switch (object.Opens) {
-      case 'live':
-        if (object.Closes == "closed") {
-          button.className = "btn btn-rounded bg-rojo ";
-          button.innerText = "CLOSED";
-        } else {
-          button.className = "btn btn-rounded bg-verde";
-          button.innerText = "ENTER RAFFLE";
-        }
-
-        break;
-
-      case 'announced':
-        button.className = "btn btn-rounded bg-gris";
-        button.innerText = "ANNOUNCED";
-        break;
-    }
-
-    enlace.appendChild(button);
-    return enlace;
-  },
-
-  /**
-   * creo  boton entered y capturo el evento para guardarlo en local storage
-   */
-  getButtonEntered: function getButtonEntered(nombreTienda) {
-    var button = document.createElement("button");
-    button.style.fontWeight = "bold";
-    button.className = "btn";
-    button.id = nombreTienda;
-    button.name = nombreTienda;
-    button.addEventListener("click", function () {
-      updateStorage(nombreTienda);
-    }, true); //button.onclick = updateStorage(button.name);
-
-    if (localStorage.getItem(nombreTienda) && localStorage.getItem(nombreTienda) == "true") {
-      button.innerText = "Entered";
-    } else {
-      button.innerText = "Mark as Entered";
-      localStorage.setItem(nombreTienda, false);
-    }
-
-    return button;
   }
 };
-exports.htmlConstructor = htmlConstructor;
+/**
+ * Aqui están las funciones con las que voy a crear los diferentes elementos
+ * pero no seran visibles en el main.
+ * 
+ */
+// funciones para la zapatilla
 
 var getTitulo = function getTitulo(object) {
   var titulo = document.createElement("h1");
+  titulo.className = 'pb-3';
   titulo.textContent = object.model;
   return titulo;
 };
 
 var getSubtitle = function getSubtitle(object) {
   var subtitle = document.createElement("h2");
+  subtitle.className = 'py-3';
   subtitle.textContent = object.colour;
   return subtitle;
 };
 
 var getDescription = function getDescription(object) {
   var description = document.createElement("h3");
+  description.className = 'py-3';
   description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
   return description;
+}; // funciones para las tarjetas de las rifas.
+
+/** Generamos el contenedor de una rifa */
+
+
+var createRifa = function createRifa(object) {
+  var rifaContainer = document.createElement("div");
+  rifaContainer.className = "col-3  p-2";
+  rifaContainer.appendChild(getLogo(object));
+  rifaContainer.appendChild(getDatosRifa(object));
+  return rifaContainer;
 };
+
+var getLogo = function getLogo(object) {
+  var logoC = document.createElement("img");
+  logoC.src = object.getLogo();
+  logoC.className = "logoStyle img-fluid";
+  return logoC;
+};
+
+var getDatosRifa = function getDatosRifa(object) {
+  var datosContainer = document.createElement("div");
+  datosContainer.className = "w-75 m-auto text-center";
+  datosContainer.appendChild(getTituloRifa(object));
+  datosContainer.appendChild(getInfoRifa(object));
+  return datosContainer;
+};
+
+var getTituloRifa = function getTituloRifa(object) {
+  var titulo = document.createElement("h4");
+  titulo.textContent = object.nombre;
+  titulo.style.fontWeight = "bold";
+  return titulo;
+};
+/** 
+     * Con esta funcion mi codigoo seria mas open-code  el problema 
+     * que he tenido ha sio filtrar los atributos que quiero mostrar
+     * , porque siempre me cogía la url del logo
+     * por eso he decidido no perder tiempo y continuar con la siguiente funcion
+     * 
+    var getInfoRifa = function (object) {
+        let infoContainer = document.createElement("div");
+
+
+        infoContainer.className = "w-100 text-center";
+        Object.values(object).forEach(element => {
+
+            
+            let span = document.createElement("span");
+            span.textContent = element;
+            infoContainer.appendChild(span);
+            let br = document.createElement("br");
+            infoContainer.appendChild(br);
+        })
+
+        return infoContainer;
+    }
+    */
+
+
+var getInfoRifa = function getInfoRifa(object) {
+  var infoContainer = document.createElement("div");
+  infoContainer.className = "w-100 text-center";
+  infoContainer.appendChild(getSpan(object));
+  /*
+  Object.values(object).forEach(element => {
+      fitros["element"] = element;
+  });
+  infoContainer.appendChild(getSpan(object.country));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getSpan(object.purchase));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getSpan(object.collection));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getSpanSize(object.Sizes));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getSpanOpens(object.opens));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getSpanClose(object.Closes));*/
+
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getButton(object));
+  infoContainer.appendChild(getBr());
+  infoContainer.appendChild(getButtonEntered(object));
+  return infoContainer;
+};
+
+var getSpan = function getSpan(object) {
+  var span = document.createElement("span");
+  span.textContent = object.toString();
+  return span;
+};
+
+var getSpanSize = function getSpanSize(value) {
+  var span = document.createElement("span");
+  span.textContent = "Size - " + value;
+  return span;
+};
+
+var getSpanOpens = function getSpanOpens(value) {
+  var span = document.createElement("span");
+  span.textContent = "Opens - " + value;
+  return span;
+};
+
+var getSpanClose = function getSpanClose(value) {
+  var span = document.createElement("span");
+  span.textContent = "Closes - " + value;
+  return span;
+};
+
+var getBr = function getBr() {
+  var br = document.createElement("br");
+  return br;
+};
+/**
+ * Creo el boton y añado para capturar evento over
+ */
+
+
+var getButton = function getButton(object) {
+  var enlace = document.createElement("a");
+  enlace.href = object.getUrl();
+  var button = document.createElement("button");
+  button.addEventListener("mouseover", function () {
+    button.style.opacity = "0.5";
+  });
+  button.addEventListener("mouseout", function () {
+    button.style.opacity = "1";
+  });
+
+  switch (object.Opens) {
+    case 'live':
+      if (object.Closes == "closed") {
+        button.className = "btn btn-rounded bg-rojo ";
+        button.innerText = "CLOSED";
+      } else {
+        button.className = "btn btn-rounded bg-verde";
+        button.innerText = "ENTER RAFFLE";
+      }
+
+      break;
+
+    case 'announced':
+      button.className = "btn btn-rounded bg-gris";
+      button.innerText = "ANNOUNCED";
+      break;
+  }
+
+  enlace.appendChild(button);
+  return enlace;
+};
+/**
+ * creo  boton entered y capturo el evento para guardarlo en local storage
+ */
+
+
+var getButtonEntered = function getButtonEntered(objeto) {
+  var button = document.createElement("button");
+  button.style.fontWeight = "bold";
+  button.className = "btn";
+  button.id = objeto.nombre;
+  button.name = objeto.nombre;
+  button.addEventListener("click", function () {
+    updateStorage(objeto.nombre);
+  }, true); //button.onclick = updateStorage(button.name);
+
+  if (localStorage.getItem(objeto.nombre) && localStorage.getItem(objeto.nombre) == "true") {
+    button.innerText = "Entered";
+  } else {
+    button.innerText = "Mark as Entered";
+    localStorage.setItem(objeto.nombre, false);
+  }
+
+  return button;
+};
+
+function singletonHtml() {
+  var prototipo = htmlConstructor;
+  return {
+    get: function get() {
+      return prototipo;
+    }
+  };
+}
+
+;
 },{}],"data/filter.js":[function(require,module,exports) {
 "use strict";
 
@@ -734,7 +664,118 @@ function singletonFilter() {
 }
 
 ;
-},{}],"data/pgWeb.js":[function(require,module,exports) {
+},{}],"data/rifa.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RifaDTO = void 0;
+
+var _main = require("./main");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RifaDTO = function RifaDTO(object, nombreIn) {
+  var _this = this;
+
+  _classCallCheck(this, RifaDTO);
+
+  this.nombre = nombreIn || "";
+  this.filtros = new Set();
+  var objectString = "";
+  var propiedades = Object.keys(object);
+  propiedades.forEach(function (propiedad) {
+    if (object[propiedad].includes("http")) {
+      var generaGet = 'get' + getCapitalize(propiedad);
+
+      _this[generaGet] = function () {
+        return object[propiedad];
+      }; //getPropertyURL(propiedad, object[propiedad]);
+
+    } else {
+      _this[propiedad] = object[propiedad];
+      objectString += updateToString(propiedad, _this[propiedad]);
+
+      _main.Filters.addFilterProperty(propiedad, _this[propiedad]);
+    }
+  });
+  /**
+   * Creo el toString de forma dinamica con todas las propiedades que no 
+   * son "http..."
+   */
+
+  this.toString = function () {
+    return objectString;
+  };
+};
+
+exports.RifaDTO = RifaDTO;
+;
+/**
+ *
+ *
+ * @param { String } propiedad
+ * @param {String} valueURL
+ * @memberof RifaDTO
+ */
+
+var getPropertyURL = function getPropertyURL(propiedad, valueURL) {
+  var generaGet = 'get' + getCapitalize(propiedad);
+
+  if (propiedad in RifaDTO) {
+    RifaDTO[generaGet] = valueURL;
+  } else {
+    /** 
+     * El problema es que al exportar este objeto 
+     * las propiedades no enumerables , no son visibles.
+     * 
+    Object.defineProperty(RifaDTO, propiedad, {
+         value: valueURL,
+         writable: true,
+         enumerable: false,
+         configurable: true
+     });*/
+
+    /** 
+      * genero funcion get del atributo, el problema 
+      * es que tmapoco es visible en documento donde se importa
+      * 
+    Oject.defineProperty(RifaDTO, propiedad, {
+        get: function() { return valueURL; }
+    });
+    */
+
+    /*RifaDTO[generaGet] = function() {
+        return valueURL;
+    };*/
+    RifaDTO[generaGet] = function () {
+      return valueURL;
+    };
+  }
+
+  ;
+};
+
+var updateToString = function updateToString(propiedad, valor) {
+  if (propiedad.includes('Size')) {
+    return '\n Size - ' + valor;
+  } else if (propiedad.includes('Opens')) {
+    return '\n Opens - ' + valor;
+  } else if (propiedad.includes('Closes')) {
+    return '\n Closes - ' + valor;
+  } else {
+    return '\n ' + valor;
+  }
+
+  ;
+};
+
+var getCapitalize = function getCapitalize(palabra) {
+  var output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
+  return output;
+};
+},{"./main":"data/main.js"}],"data/pgWeb.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -893,19 +934,20 @@ var _raffles = require("./raffles");
 
 var _shoe = require("./shoe");
 
-var _rifa = require("./rifa");
-
 var _htmlContructor = require("./htmlContructor");
 
 var _filter = require("./filter");
 
 var _pgWeb = require("./pgWeb");
 
-require("../css/style.css");
+var _style = _interopRequireDefault(require("../css/style.css"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Filters = (0, _filter.singletonFilter)().get();
 exports.Filters = Filters;
 var paginaObject = (0, _pgWeb.singletonPgWeb)().get();
+var toHtml = (0, _htmlContructor.singletonHtml)().get();
 var contenedorZapatilla;
 var contendorRifas;
 
@@ -918,10 +960,14 @@ window.onload = function () {
   paginaObject.shoe = new _shoe.ShoeDTO(_raffles.shoe); //Object.assign(paginaObject.filtros, Filters);
 
   console.log(paginaObject);
-  console.log(Filters);
-  window.alert('mirar en la consola ,pulsa F12');
+  console.log(Filters); //window.alert('mirar en la consola ,pulsa F12');
+  // Poblamos el html.
+
+  console.log(toHtml);
+  toHtml.loadZapatilla(paginaObject.shoe, contenedorZapatilla);
+  toHtml.loadAllRifas(paginaObject.listaRifas, contendorRifas);
 };
-},{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./rifa":"data/rifa.js","./htmlContructor":"data/htmlContructor.js","./filter":"data/filter.js","./pgWeb":"data/pgWeb.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./htmlContructor":"data/htmlContructor.js","./filter":"data/filter.js","./pgWeb":"data/pgWeb.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -949,7 +995,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49455" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57038" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

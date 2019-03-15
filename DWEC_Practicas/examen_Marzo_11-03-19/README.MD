@@ -1,5 +1,7 @@
 
 @Version 2.0
+
+Uso de objetos, singelton y carga dinamica de atributos.
 https://github.com/davidgm17/Formacion_FP/tree/master/DWEC_Practicas/examen_Marzo_Version2
 
 
