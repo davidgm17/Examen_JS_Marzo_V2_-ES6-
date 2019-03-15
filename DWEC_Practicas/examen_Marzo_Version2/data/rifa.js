@@ -35,7 +35,7 @@ export class RifaDTO {
  * @memberof RifaDTO
  */
 let getPropertyURL = function(propiedad, valueURL) {
-    if (propiedad in this) {
+    if (propiedad in RifaDTO) {
         RifaDTO[propiedad] = valueURL;
     } else {
         /** 

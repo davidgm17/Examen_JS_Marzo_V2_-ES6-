@@ -5,30 +5,41 @@ class Filter {
     toString() {
         return "estoy vivo";
     };
-    addFilterProperty = function(propiedadNombre, propiedadValor) {
+    addFilterProperty(propiedadNombre, propiedadValor) {
         if (propiedadNombre.includes("country")) {
             if (this[propiedadNombre]) {
-                for (var property of dameCountries(propiedadValor)) {
-                    this[propiedadNombre].add(property);
-                }
+                this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCountries(propiedadValor));
+                /* for (var property of dameCountries(propiedadValor)) {
+                     //this[propiedadNombre].push(property);
+                     if (!this[propiedadNombre].has(property)) {
+                         this[propiedadNombre].add(property);
+                     }
+                 };*/
             } else {
                 this[propiedadNombre] = dameCountries(propiedadValor);
             };
 
         } else if (propiedadNombre.includes("purchase")) {
             if (this[propiedadNombre]) {
-                for (var property of damePurchases(propiedadValor)) {
-                    this[propiedadNombre].add(property);
-                };
+                this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], damePurchases(propiedadValor));
+                /*for (var property of damePurchases(propiedadValor)) {
+                    console.log(property);
+                    if (!this[propiedadNombre].has(property)) {
+                        this[propiedadNombre].add(property);
+                    }
+                };*/
             } else {
                 this[propiedadNombre] = damePurchases(propiedadValor);
             };
 
         } else if (propiedadNombre.includes("collection")) {
             if (this[propiedadNombre]) {
-                for (var property of dameCollections(propiedadValor)) {
-                    this[propiedadNombre].add(property);
-                };
+                this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCollections(propiedadValor));
+                /*for (var property of dameCollections(propiedadValor)) {
+                    if (!this[propiedadNombre].has(property)) {
+                        this[propiedadNombre].add(property);
+                    }
+                };*/
             } else {
                 this[propiedadNombre] = dameCollections(propiedadValor);
             };
@@ -36,9 +47,24 @@ class Filter {
     };
 };
 
+
+let poblarPropiedadTipoSet = function(arraySetAnterior, arraySetNuevo) {
+
+    Set.prototype.union = function(setB) {
+        var union = new Set(this);
+        for (var elem of setB) {
+            union.add(elem);
+        }
+        return union;
+    };
+    let anterior = new Set(arraySetAnterior);
+    return anterior.union(arraySetNuevo);
+}
+
+
 let dameCountries = function(cadenaPalabras) {
     let listaPalabras = new Set();
-    if (propiedadValor.includes(",")) {
+    if (cadenaPalabras.includes(",")) {
         let listaProvisional = cadenaPalabras.split(',');
         listaProvisional.forEach(palabra => {
             if (palabra.includes("Fr") || palabra.includes("France")) {
@@ -63,18 +89,22 @@ let dameCountries = function(cadenaPalabras) {
 
 let damePurchases = function(cadenaPalabras) {
     let listaPalabras = new Set();
-    listaPalabras = cadenaPalabras.split(' ');
+    if (cadenaPalabras.includes('/')) {
+        listaPalabras = cadenaPalabras.split('/');
+    } else {
+        listaPalabras = cadenaPalabras.split(' ');
+    }
     return listaPalabras;
 }
 
 let dameCollections = function(cadenaPalabras) {
         let listaPalabras = new Set();
         if (cadenaPalabras.includes('Only')) {
-            listaPalabras.add(cadenaPalabras.split('Only').trim());
+            listaPalabras.add(cadenaPalabras.split('Only')[0].trim());
         } else if (cadenaPalabras.includes('and')) {
-            listaPalabras.add(cadenaPalabras.split('and').trim());
+            listaPalabras.add(cadenaPalabras.split('and')[0].trim());
         } else if (cadenaPalabras.includes('vailable')) {
-            listaPalabras.add(cadenaPalabras.split('Available').trim());
+            listaPalabras.add(cadenaPalabras.split('Available')[0].trim());
         };
         return listaPalabras;
     }

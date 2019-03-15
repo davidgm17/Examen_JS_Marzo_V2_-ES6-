@@ -1,12 +1,26 @@
-import { raffles, shoe } from './raffles';
-import { ShoeDTO } from './shoe';
-import { RifaDTO } from './rifa';
-import { htmlConstructor } from './htmlContructor';
-import { singletonFilter } from './filter';
+import {
+    raffles as raffleDataSource,
+    shoe as ShoeDataSource
+} from './raffles';
+import {
+    ShoeDTO
+} from './shoe';
+import {
+    RifaDTO as Rifa
+} from './rifa';
+import {
+    htmlConstructor
+} from './htmlContructor';
+import {
+    singletonFilter
+} from './filter';
+import {
+    singletonPgWeb
+} from './pgWeb';
 import "../css/style.css";
 
 export let Filters = singletonFilter().get();
-
+var paginaObject = singletonPgWeb().get();
 
 var updateStorage = function(nombreTienda) {
     let nombre = nombreTienda;
@@ -37,19 +51,13 @@ window.onload = function() {
     contenedorZapatilla = document.getElementById("datosZapa");
     contendorRifas = document.getElementById("contendorRifas");
 
-    loadZapatilla(datasource.sole.shoe, contenedorZapatilla);
-    getAllRifas(datasource.sole.raffles, contendorRifas);
-    export let Filters = singletonFilter().get();
-    let rifa = new RifaDto(datasource.sole.raffles["Antonia Milano"], "Antonia Milano");
+    paginaObject.addListaRifas(raffleDataSource);
+    paginaObject.addFiltros(Filters);
+    paginaObject.shoe = new ShoeDTO(ShoeDataSource);
+    //Object.assign(paginaObject.filtros, Filters);
+    console.log(paginaObject);
     console.log(Filters);
-    console.log(Filters.toString());
-    console.log(rifa);
-    console.log(rifa.toString());
-    console.log(rifa.getLogo);
-    console.log(rifa.getUrl);
-    let shoe = new ShoeDTO(datasource.sole.shoe);
-    console.log(shoe);
-    console.log(htmlConstructor);
+
 
 
 };

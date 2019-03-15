@@ -204,11 +204,14 @@ var raffles = {
     "url": "https://www.solebox.com/en/Footwear/"
   }
 };
-exports.raffles = raffles;
+/*
 exports.sole = {
-  "shoe": shoe,
-  "raffles": raffles
+    "shoe": shoe,
+    "raffles": raffles
 };
+*/
+
+exports.raffles = raffles;
 },{}],"data/shoe.js":[function(require,module,exports) {
 "use strict";
 
@@ -249,6 +252,15 @@ function () {
 exports.ShoeDTO = ShoeDTO;
 ;
 },{}],"data/rifa.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RifaDTO = void 0;
+
+var _main = require("./main");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RifaDTO = function RifaDTO(object, nombre) {
@@ -257,6 +269,7 @@ var RifaDTO = function RifaDTO(object, nombre) {
   _classCallCheck(this, RifaDTO);
 
   this.name = nombre || "";
+  this.filtros = new Set();
   var objectString = this.name;
   var propiedades = Object.keys(object);
   propiedades.forEach(function (propiedad) {
@@ -265,6 +278,8 @@ var RifaDTO = function RifaDTO(object, nombre) {
     } else {
       _this[propiedad] = object[propiedad];
       objectString += updateToString(propiedad, _this[propiedad]);
+
+      _main.Filters.addFilterProperty(propiedad, _this[propiedad]);
     }
   });
   /**
@@ -277,6 +292,7 @@ var RifaDTO = function RifaDTO(object, nombre) {
   };
 };
 
+exports.RifaDTO = RifaDTO;
 ;
 /**
  *
@@ -287,7 +303,7 @@ var RifaDTO = function RifaDTO(object, nombre) {
  */
 
 var getPropertyURL = function getPropertyURL(propiedad, valueURL) {
-  if (propiedad in this) {
+  if (propiedad in RifaDTO) {
     RifaDTO[propiedad] = valueURL;
   } else {
     /** 
@@ -338,9 +354,7 @@ var getCapitalize = function getCapitalize(palabra) {
   var output = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase();
   return output;
 };
-
-module.exports = RifaDTO;
-},{}],"data/htmlContructor.js":[function(require,module,exports) {
+},{"./main":"data/main.js"}],"data/htmlContructor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -536,7 +550,249 @@ var getDescription = function getDescription(object) {
   description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
   return description;
 };
-},{}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{}],"data/filter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.singletonFilter = singletonFilter;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Filter =
+/*#__PURE__*/
+function () {
+  function Filter() {
+    _classCallCheck(this, Filter);
+
+    console.log("soy un filtro");
+  }
+
+  _createClass(Filter, [{
+    key: "toString",
+    value: function toString() {
+      return "estoy vivo";
+    }
+  }, {
+    key: "addFilterProperty",
+    value: function addFilterProperty(propiedadNombre, propiedadValor) {
+      if (propiedadNombre.includes("country")) {
+        if (this[propiedadNombre]) {
+          this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCountries(propiedadValor));
+          /* for (var property of dameCountries(propiedadValor)) {
+               //this[propiedadNombre].push(property);
+               if (!this[propiedadNombre].has(property)) {
+                   this[propiedadNombre].add(property);
+               }
+           };*/
+        } else {
+          this[propiedadNombre] = dameCountries(propiedadValor);
+        }
+
+        ;
+      } else if (propiedadNombre.includes("purchase")) {
+        if (this[propiedadNombre]) {
+          this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], damePurchases(propiedadValor));
+          /*for (var property of damePurchases(propiedadValor)) {
+              console.log(property);
+              if (!this[propiedadNombre].has(property)) {
+                  this[propiedadNombre].add(property);
+              }
+          };*/
+        } else {
+          this[propiedadNombre] = damePurchases(propiedadValor);
+        }
+
+        ;
+      } else if (propiedadNombre.includes("collection")) {
+        if (this[propiedadNombre]) {
+          this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCollections(propiedadValor));
+          /*for (var property of dameCollections(propiedadValor)) {
+              if (!this[propiedadNombre].has(property)) {
+                  this[propiedadNombre].add(property);
+              }
+          };*/
+        } else {
+          this[propiedadNombre] = dameCollections(propiedadValor);
+        }
+
+        ;
+      }
+
+      ;
+    }
+  }]);
+
+  return Filter;
+}();
+
+;
+
+var poblarPropiedadTipoSet = function poblarPropiedadTipoSet(arraySetAnterior, arraySetNuevo) {
+  Set.prototype.union = function (setB) {
+    var union = new Set(this);
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = setB[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var elem = _step.value;
+        union.add(elem);
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    return union;
+  };
+
+  var anterior = new Set(arraySetAnterior);
+  return anterior.union(arraySetNuevo);
+};
+
+var dameCountries = function dameCountries(cadenaPalabras) {
+  var listaPalabras = new Set();
+
+  if (cadenaPalabras.includes(",")) {
+    var listaProvisional = cadenaPalabras.split(',');
+    listaProvisional.forEach(function (palabra) {
+      if (palabra.includes("Fr") || palabra.includes("France")) {
+        listaPalabras.add("France");
+      } else if (palabra.includes("It") || palabra.includes("Italy")) {
+        listaPalabras.add("Italy");
+      } else if (palabra.includes("UK") || palabra.includes("United Kingdom")) {
+        listaPalabras.add("UK");
+      } else if (palabra.includes("Ger") || palabra.includes("Germany")) {
+        listaPalabras.add("Germany");
+      } else if (palabra.includes("Swe") || palabra.includes("Sweeden")) {
+        listaPalabras.add("Sweeden");
+      } else {
+        listaPalabras.add(palabra);
+      }
+
+      ;
+    });
+  } else {
+    listaPalabras.add(cadenaPalabras.trim());
+  }
+
+  return listaPalabras;
+};
+
+var damePurchases = function damePurchases(cadenaPalabras) {
+  var listaPalabras = new Set();
+
+  if (cadenaPalabras.includes('/')) {
+    listaPalabras = cadenaPalabras.split('/');
+  } else {
+    listaPalabras = cadenaPalabras.split(' ');
+  }
+
+  return listaPalabras;
+};
+
+var dameCollections = function dameCollections(cadenaPalabras) {
+  var listaPalabras = new Set();
+
+  if (cadenaPalabras.includes('Only')) {
+    listaPalabras.add(cadenaPalabras.split('Only')[0].trim());
+  } else if (cadenaPalabras.includes('and')) {
+    listaPalabras.add(cadenaPalabras.split('and')[0].trim());
+  } else if (cadenaPalabras.includes('vailable')) {
+    listaPalabras.add(cadenaPalabras.split('Available')[0].trim());
+  }
+
+  ;
+  return listaPalabras;
+}; // singleton de objeto filtro
+
+
+function singletonFilter() {
+  var prototipo = new Filter();
+  return {
+    get: function get() {
+      return prototipo;
+    }
+  };
+}
+
+;
+},{}],"data/pgWeb.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.singletonPgWeb = singletonPgWeb;
+
+var _rifa = require("./rifa");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var PgWeb =
+/*#__PURE__*/
+function () {
+  function PgWeb() {
+    _classCallCheck(this, PgWeb);
+
+    console.log("este objeto es la dimension pagina web");
+    this.listaRifas = new Array();
+    this.filtros = new Object();
+  }
+
+  _createClass(PgWeb, [{
+    key: "addListaRifas",
+    value: function addListaRifas(dataSource) {
+      var nombresObjetos = Object.getOwnPropertyNames(dataSource);
+
+      for (var index = 0; index < nombresObjetos.length; index++) {
+        var rifa = new _rifa.RifaDTO(dataSource[nombresObjetos[index]], nombresObjetos[index]);
+        this.listaRifas.push(rifa);
+      }
+    }
+  }, {
+    key: "addFiltros",
+    value: function addFiltros(dataSource) {
+      Object.assign(this.filtros, dataSource);
+    }
+  }]);
+
+  return PgWeb;
+}(); // singleton de objeto pagina web, solo quiero un objeto en todo el funcionamiento
+
+
+function singletonPgWeb() {
+  var prototipo = new PgWeb();
+  return {
+    get: function get() {
+      return prototipo;
+    }
+  };
+}
+
+;
+},{"./rifa":"data/rifa.js"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -611,217 +867,28 @@ module.hot.accept(reloadCSS);
 },{"_css_loader":"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"data/main.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Filters = void 0;
+
+var _raffles = require("./raffles");
+
 var _shoe = require("./shoe");
+
+var _rifa = require("./rifa");
 
 var _htmlContructor = require("./htmlContructor");
 
+var _filter = require("./filter");
+
+var _pgWeb = require("./pgWeb");
+
 require("../css/style.css");
 
-var datasource = require('./raffles');
-
-var RifaDto = require('./rifa');
-
-/**
- * Logica que se  implementa
- */
-
-/* var repositorio = require('raffles');*/
-
-/** Generamos el contenedor de datos de la zapatilla */
-var loadZapatilla = function loadZapatilla(object, place) {
-  /** añadimos dinamicamente mas atributos al div */
-  place.className += " rigth";
-  /** Cargamos los datos de la zapatilla */
-
-  place.appendChild(getTitulo(object));
-  place.appendChild(getSubtitle(object));
-  place.appendChild(getDescription(object));
-};
-
-var getTitulo = function getTitulo(object) {
-  var titulo = document.createElement("h1");
-  titulo.textContent = object.model;
-  return titulo;
-};
-
-var getSubtitle = function getSubtitle(object) {
-  var subtitle = document.createElement("h2");
-  subtitle.textContent = object.colour;
-  return subtitle;
-};
-
-var getDescription = function getDescription(object) {
-  var description = document.createElement("h3");
-  description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
-  return description;
-};
-/** Generamos el contenedor de una rifa */
-
-
-var createRifa = function createRifa(object, nombreObjeto) {
-  var rifaContainer = document.createElement("div");
-  rifaContainer.className = "col-4 row";
-  rifaContainer.appendChild(getLogo(object));
-  rifaContainer.appendChild(getDatosRifa(object, nombreObjeto));
-  return rifaContainer;
-};
-
-var getLogo = function getLogo(object) {
-  var logoC = document.createElement("img");
-  logoC.src = object.logo;
-  logoC.className = "logoStyle";
-  return logoC;
-};
-
-var getDatosRifa = function getDatosRifa(object, nombreObjeto) {
-  var datosContainer = document.createElement("div");
-  datosContainer.className = "w-75 m-auto text-center";
-  datosContainer.appendChild(getTituloRifa(nombreObjeto));
-  datosContainer.appendChild(getInfoRifa(object, nombreObjeto));
-  return datosContainer;
-};
-
-var getTituloRifa = function getTituloRifa(nombreObjeto) {
-  var titulo = document.createElement("h4");
-  titulo.textContent = nombreObjeto;
-  titulo.style.fontWeight = "bold";
-  return titulo;
-};
-/** 
- * Con esta funcion mi codigoo seria mas open-code  el problema 
- * que he tenido ha sio filtrar los atributos que quiero mostrar
- * , porque siempre me cogía la url del logo
- * por eso he decidido no perder tiempo y continuar con la siguiente funcion
- * 
-var getInfoRifa = function (object) {
-    let infoContainer = document.createElement("div");
-        infoContainer.className = "w-100 text-center";
-    Object.values(object).forEach(element => {
-          
-        let span = document.createElement("span");
-        span.textContent = element;
-        infoContainer.appendChild(span);
-        let br = document.createElement("br");
-        infoContainer.appendChild(br);
-    })
-      return infoContainer;
-}
-*/
-
-
-var getInfoRifa = function getInfoRifa(object, nombreObjeto) {
-  var infoContainer = document.createElement("div");
-  infoContainer.className = "w-100 text-center";
-  Object.values(object).forEach(function (element) {
-    fitros["element"] = element;
-  });
-  infoContainer.appendChild(getSpan(object.country));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getSpan(object.purchase));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getSpan(object.collection));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getSpanSize(object.Sizes));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getSpanOpens(object.opens));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getSpanClose(object.Closes));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getButton(object));
-  infoContainer.appendChild(getBr());
-  infoContainer.appendChild(getButtonEntered(nombreObjeto));
-  return infoContainer;
-};
-
-var getSpan = function getSpan(value) {
-  var span = document.createElement("span");
-  span.textContent = value;
-  return span;
-};
-
-var getSpanSize = function getSpanSize(value) {
-  var span = document.createElement("span");
-  span.textContent = "Size - " + value;
-  return span;
-};
-
-var getSpanOpens = function getSpanOpens(value) {
-  var span = document.createElement("span");
-  span.textContent = "Opens - " + value;
-  return span;
-};
-
-var getSpanClose = function getSpanClose(value) {
-  var span = document.createElement("span");
-  span.textContent = "Closes - " + value;
-  return span;
-};
-
-var getBr = function getBr() {
-  var br = document.createElement("br");
-  return br;
-};
-/**
- * Creo el boton y añado para capturar evento over
- */
-
-
-var getButton = function getButton(object) {
-  var enlace = document.createElement("a");
-  enlace.href = object.url;
-  var button = document.createElement("button");
-  button.addEventListener("mouseover", function () {
-    button.style.opacity = "0.5";
-  });
-  button.addEventListener("mouseout", function () {
-    button.style.opacity = "1";
-  });
-
-  switch (object.Opens) {
-    case 'live':
-      if (object.Closes == "closed") {
-        button.className = "btn btn-rounded bg-rojo ";
-        button.innerText = "CLOSED";
-      } else {
-        button.className = "btn btn-rounded bg-verde";
-        button.innerText = "ENTER RAFFLE";
-      }
-
-      break;
-
-    case 'announced':
-      button.className = "btn btn-rounded bg-gris";
-      button.innerText = "ANNOUNCED";
-      break;
-  }
-
-  enlace.appendChild(button);
-  return enlace;
-};
-/**
- * creo  boton entered y capturo el evento para guardarlo en local storage
- */
-
-
-var getButtonEntered = function getButtonEntered(nombreTienda) {
-  var button = document.createElement("button");
-  button.style.fontWeight = "bold";
-  button.className = "btn";
-  button.id = nombreTienda;
-  button.name = nombreTienda;
-  button.addEventListener("click", function () {
-    updateStorage(nombreTienda);
-  }, true); //button.onclick = updateStorage(button.name);
-
-  if (localStorage.getItem(nombreTienda) && localStorage.getItem(nombreTienda) == "true") {
-    button.innerText = "Entered";
-  } else {
-    button.innerText = "Mark as Entered";
-    localStorage.setItem(nombreTienda, false);
-  }
-
-  return button;
-};
+var Filters = (0, _filter.singletonFilter)().get();
+exports.Filters = Filters;
+var paginaObject = (0, _pgWeb.singletonPgWeb)().get();
 
 var updateStorage = function updateStorage(nombreTienda) {
   var nombre = nombreTienda;
@@ -840,39 +907,21 @@ var updateStorage = function updateStorage(nombreTienda) {
   }
 };
 
-var getAllRifas = function getAllRifas(object, place) {
-  place.className = "row d-wrap m-auto";
-  var numeroRifas = Object.values(object).length;
-  var listaObjetosRifa = Object.values(object);
-  var listaNombresRifa = Object.getOwnPropertyNames(object);
-
-  for (var index = 0; index < numeroRifas; index++) {
-    if (listaNombresRifa[index] != "length") {
-      place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
-    }
-  }
-};
-
 var contenedorZapatilla;
 var contendorRifas;
-var fitros = {};
 
 window.onload = function () {
   /** Localizamos los contenedores de los datos */
   contenedorZapatilla = document.getElementById("datosZapa");
   contendorRifas = document.getElementById("contendorRifas");
-  loadZapatilla(datasource.sole.shoe, contenedorZapatilla);
-  getAllRifas(datasource.sole.raffles, contendorRifas);
-  var rifa = new RifaDto(datasource.sole.raffles["Antonia Milano"], "Antonia Milano");
-  console.log(rifa);
-  console.log(rifa.toString());
-  console.log(rifa.getLogo);
-  console.log(rifa.getUrl);
-  var shoe = new _shoe.ShoeDTO(datasource.sole.shoe);
-  console.log(shoe);
-  console.log(_htmlContructor.htmlConstructor);
+  paginaObject.addListaRifas(_raffles.raffles);
+  paginaObject.addFiltros(Filters);
+  paginaObject.shoe = new _shoe.ShoeDTO(_raffles.shoe); //Object.assign(paginaObject.filtros, Filters);
+
+  console.log(paginaObject);
+  console.log(Filters);
 };
-},{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./rifa":"data/rifa.js","./htmlContructor":"data/htmlContructor.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./rifa":"data/rifa.js","./htmlContructor":"data/htmlContructor.js","./filter":"data/filter.js","./pgWeb":"data/pgWeb.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -900,7 +949,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57584" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49455" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
