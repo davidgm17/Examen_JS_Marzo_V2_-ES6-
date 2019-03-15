@@ -19,6 +19,18 @@ class PgWeb {
     addFiltros(dataSource) {
         Object.assign(this.filtros, dataSource);
     };
+    updateStorage(nombreTienda) {
+        let nombre = nombreTienda;
+        if ((localStorage.getItem(nombre)) && (localStorage.getItem(nombre) == "true")) {
+            localStorage.setItem(nombre, false);
+            let boton = document.getElementById(nombre);
+            boton.innerText = "Mark as Entered";
+        } else {
+            localStorage.setItem(nombre, true);
+            let boton = document.getElementById(nombre);
+            boton.innerText = "Entered";
+        }
+    }
 }
 
 // singleton de objeto pagina web, solo quiero un objeto en todo el funcionamiento

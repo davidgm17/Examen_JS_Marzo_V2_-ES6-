@@ -776,6 +776,23 @@ function () {
     value: function addFiltros(dataSource) {
       Object.assign(this.filtros, dataSource);
     }
+  }, {
+    key: "updateStorage",
+    value: function updateStorage(nombreTienda) {
+      var nombre = nombreTienda;
+
+      if (localStorage.getItem(nombre) && localStorage.getItem(nombre) == "true") {
+        localStorage.setItem(nombre, false);
+        var boton = document.getElementById(nombre);
+        boton.innerText = "Mark as Entered";
+      } else {
+        localStorage.setItem(nombre, true);
+
+        var _boton = document.getElementById(nombre);
+
+        _boton.innerText = "Entered";
+      }
+    }
   }]);
 
   return PgWeb;
@@ -889,24 +906,6 @@ require("../css/style.css");
 var Filters = (0, _filter.singletonFilter)().get();
 exports.Filters = Filters;
 var paginaObject = (0, _pgWeb.singletonPgWeb)().get();
-
-var updateStorage = function updateStorage(nombreTienda) {
-  var nombre = nombreTienda;
-  console.log(nombre);
-
-  if (localStorage.getItem(nombre) && localStorage.getItem(nombre) == "true") {
-    localStorage.setItem(nombre, false);
-    var boton = document.getElementById(nombre);
-    boton.innerText = "Mark as Entered";
-  } else {
-    localStorage.setItem(nombre, true);
-
-    var _boton = document.getElementById(nombre);
-
-    _boton.innerText = "Entered";
-  }
-};
-
 var contenedorZapatilla;
 var contendorRifas;
 
@@ -920,6 +919,7 @@ window.onload = function () {
 
   console.log(paginaObject);
   console.log(Filters);
+  window.alert('mirar en la consola ,pulsa F12');
 };
 },{"./raffles":"data/raffles.js","./shoe":"data/shoe.js","./rifa":"data/rifa.js","./htmlContructor":"data/htmlContructor.js","./filter":"data/filter.js","./pgWeb":"data/pgWeb.js","../css/style.css":"css/style.css"}],"C:/Users/david.gomezmartinez/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

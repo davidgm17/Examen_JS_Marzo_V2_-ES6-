@@ -22,23 +22,6 @@ import "../css/style.css";
 export let Filters = singletonFilter().get();
 var paginaObject = singletonPgWeb().get();
 
-var updateStorage = function(nombreTienda) {
-    let nombre = nombreTienda;
-    console.log(nombre);
-    if ((localStorage.getItem(nombre)) && (localStorage.getItem(nombre) == "true")) {
-
-        localStorage.setItem(nombre, false);
-        let boton = document.getElementById(nombre);
-        boton.innerText = "Mark as Entered";
-    } else {
-        localStorage.setItem(nombre, true);
-        let boton = document.getElementById(nombre);
-        boton.innerText = "Entered";
-    }
-}
-
-
-
 
 
 
@@ -57,7 +40,7 @@ window.onload = function() {
     //Object.assign(paginaObject.filtros, Filters);
     console.log(paginaObject);
     console.log(Filters);
-
+    window.alert('mirar en la consola ,pulsa F12');
 
 
 };
