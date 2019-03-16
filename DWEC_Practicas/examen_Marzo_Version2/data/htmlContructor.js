@@ -1,4 +1,7 @@
-import { paginaObject, contendorRifas } from './main';
+import {
+    paginaObject,
+    contendorRifas
+} from './main';
 var htmlConstructor = {
 
     loadZapatilla: function(object, place) {
@@ -134,17 +137,17 @@ let aplicarFiltros = function(boton) {
     if (boton.id == 'all' && boton.value == 'true') {
         vaciarContenedor(contendorRifas);
         console.log('todos borrados');
-
         htmlConstructor.loadAllRifas(paginaObject.listaRifas, contendorRifas);
         delete paginaObject.rifasFiltradas;
-        console.log(paginaObject);
+        console.log('Borrada propiedad rifas Filtradas, racargadas todas las rifas');
     } else if (boton.id != 'all') {
-        if (!paginaObject.hasOwnProperty('rifasFiltradas')) { paginaObject.rifasFiltradas = new Array() };
-        paginaObject.rifasFiltradas.push(boton);
-        console.log(paginaObject);
-
+        if (!paginaObject.hasOwnProperty('rifasFiltradas')) {
+            paginaObject.rifasFiltradas = new Array();
+            htmlConstructor.loadAllRifas(listaActual(paginaObject.listaRifas, boton), contendorRifas);
+        } else {
+            htmlConstructor.loadAllRifas(listaActual(paginaObject.rifasFiltradas, boton), contendorRifas);
+        };
     };
-
 };
 
 /*
@@ -160,16 +163,26 @@ let vaciarContenedor = function(contenedor) {
     };
 };
 
-/**
- * Aqui están las funciones con las que voy a crear los diferentes elementos
- * pero no seran visibles en el main.
- * 
- */
-/*
-==============================================
-// funciones para la zapatilla
-===============================================
+/* 
+hay que iterar sobre los objetos de la lista en función del boton.
 */
+let listaActual = function(listaObjetos) {
+        let listaSalida = new Array();
+        paginaObject.rifasFiltradas.push(boton);
+        // TODO
+        return listaSalida;
+
+    }
+    /**
+     * Aqui están las funciones con las que voy a crear los diferentes elementos
+     * pero no seran visibles en el main.
+     * 
+     */
+    /*
+    ==============================================
+    // funciones para la zapatilla
+    ===============================================
+    */
 let getTitulo = function(object) {
     let titulo = document.createElement("h1");
     titulo.className = 'pb-3';

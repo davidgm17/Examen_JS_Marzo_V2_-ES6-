@@ -266,14 +266,16 @@ var htmlConstructor = {
 
     if (localStorage.getItem(nombre) && localStorage.getItem(nombre) == "true") {
       localStorage.setItem(nombre, false);
-      var boton = document.getElementById(nombre);
-      boton.innerText = "Mark as Entered";
-    } else {
-      localStorage.setItem(nombre, true);
 
       var _boton = document.getElementById(nombre);
 
-      _boton.innerText = "Entered";
+      _boton.innerText = "Mark as Entered";
+    } else {
+      localStorage.setItem(nombre, true);
+
+      var _boton2 = document.getElementById(nombre);
+
+      _boton2.innerText = "Entered";
     }
   }
 };
@@ -377,17 +379,16 @@ var aplicarFiltros = function aplicarFiltros(boton) {
     console.log('todos borrados');
     htmlConstructor.loadAllRifas(_main.paginaObject.listaRifas, _main.contendorRifas);
     delete _main.paginaObject.rifasFiltradas;
-    console.log(_main.paginaObject);
+    console.log('Borrada propiedad rifas Filtradas, racargadas todas las rifas');
   } else if (boton.id != 'all') {
     if (!_main.paginaObject.hasOwnProperty('rifasFiltradas')) {
       _main.paginaObject.rifasFiltradas = new Array();
+      htmlConstructor.loadAllRifas(listaActual(_main.paginaObject.listaRifas, boton), _main.contendorRifas);
+    } else {
+      htmlConstructor.loadAllRifas(listaActual(_main.paginaObject.rifasFiltradas, boton), _main.contendorRifas);
     }
 
     ;
-
-    _main.paginaObject.rifasFiltradas.push(boton);
-
-    console.log(_main.paginaObject);
   }
 
   ;
@@ -408,6 +409,19 @@ var vaciarContenedor = function vaciarContenedor(contenedor) {
   }
 
   ;
+};
+/* 
+hay que iterar sobre los objetos de la lista en función del boton.
+*/
+
+
+var listaActual = function listaActual(listaObjetos) {
+  var listaSalida = new Array();
+
+  _main.paginaObject.rifasFiltradas.push(boton); // TODO
+
+
+  return listaSalida;
 };
 /**
  * Aqui están las funciones con las que voy a crear los diferentes elementos
