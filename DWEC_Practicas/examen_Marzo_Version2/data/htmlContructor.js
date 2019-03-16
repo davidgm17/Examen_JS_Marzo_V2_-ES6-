@@ -1,8 +1,7 @@
+import { paginaObject, contendorRifas } from './main';
 var htmlConstructor = {
 
     loadZapatilla: function(object, place) {
-        console.log(object);
-
         /** añadimos dinamicamente mas atributos al div */
         place.className += " rigth";
         /** Cargamos los datos de la zapatilla */
@@ -14,24 +13,151 @@ var htmlConstructor = {
 
     loadAllRifas: function(listaObjetos, place) {
         place.className = "row d-wrap m-auto w-75";
-        /* let numeroRifas = Object.values(object).length;
-             let listaObjetosRifa = Object.values(object);
-             let listaNombresRifa = Object.getOwnPropertyNames(object);
-             for (let index = 0; index < numeroRifas; index++) {
-                 if (listaNombresRifa[index] != "length") {
-                     place.appendChild(createRifa(listaObjetosRifa[index], listaNombresRifa[index]));
-                 }
-             }*/
         listaObjetos.forEach(objeto => {
             place.appendChild(createRifa(objeto));
 
         });
 
+    },
+    loadFiltros: function(objeto, place) {
+        place.appendChild(newFilterContainer(objeto));
+    },
+
+    updateStorage: function(nombreTienda) {
+        let nombre = nombreTienda;
+        if ((localStorage.getItem(nombre)) && (localStorage.getItem(nombre) == "true")) {
+            localStorage.setItem(nombre, false);
+            let boton = document.getElementById(nombre);
+            boton.innerText = "Mark as Entered";
+        } else {
+            localStorage.setItem(nombre, true);
+            let boton = document.getElementById(nombre);
+            boton.innerText = "Entered";
+        }
     }
 
+};
+/* 
+=====================================
+// Creamos el contenedor de filtros
+====================================
+*/
 
 
+let newFilterContainer = function(objeto) {
+    let lista = document.createElement("div");
+    lista.className = "btn-toolbar col-12 w-75 m-auto pt-5 pb-3 d-flex justify-content-around";
+    lista.setAttribute('role', 'toolbar');
+    lista.appendChild(subconjunto("allGroup", ["all"]));
 
+    Object.keys(objeto).forEach(listaFiltros => {
+        lista.appendChild(subconjunto(listaFiltros, objeto[listaFiltros]));
+    });
+    return lista;
+};
+
+let subconjunto = function(filtro, valores) {
+    let subFiltros = document.createElement("div");
+    subFiltros.className = "btn-group mr-2";
+    subFiltros.setAttribute('role', 'group');
+    subFiltros.id = filtro;
+    valores.forEach(valor => {
+        subFiltros.appendChild(getBotonFiltro(valor));
+    });
+    return subFiltros;
+};
+
+let getBotonFiltro = function(filtro) {
+    let botonFiltro = document.createElement("button");
+    botonFiltro.id = filtro;
+    botonFiltro.textContent = filtro.toUpperCase();
+    botonFiltro.setAttribute('type', 'button');
+    botonFiltro.setAttribute('value', 'false');
+    botonFiltro.classList.add('btn', 'btn-outline-success');
+    botonFiltro.addEventListener("click", function(ev) {
+
+        if (botonFiltro.value == 'true') {
+            desactivarBoton(this);
+
+        } else {
+            activarBoton(this);
+
+        };
+        aplicarFiltros(this);
+
+    });
+    return botonFiltro;
+};
+let desactivarBoton = function(boton) {
+    boton.classList.add('btn-outline-success');
+    boton.classList.remove('btn-success');
+    boton.setAttribute('value', 'false');
+};
+let activarBoton = function(boton) {
+
+    boton.classList.add('btn-success');
+    boton.classList.remove('btn-outline-success');
+    boton.setAttribute('value', 'true');
+    if (boton.id != 'all') {
+        let botonAll = document.getElementById('all');
+        desactivarBoton(botonAll);
+    } else {
+        desactivarRestoBotones(boton);
+    }
+};
+
+/*
+Sabiendo que el boton es 'all' utilizo node.parentElement, para buscar a la caja contenedora
+y creo un bucle mientras tenga mas cajas contenedoras para desactivar todos los botones.
+*/
+
+let desactivarRestoBotones = function(botonAll) {
+    let cajaBotonAll = botonAll.parentElement;
+    let siguienteCaja = cajaBotonAll.nextSibling;
+    while (siguienteCaja) {
+        if (siguienteCaja.hasChildNodes()) {
+            siguienteCaja.childNodes.forEach(elemento => {
+                if (elemento.type == 'button') desactivarBoton(elemento);
+            });
+        }
+        siguienteCaja = siguienteCaja.nextSibling;
+    }
+};
+
+/**
+ * 
+ * Función para aplicar filtros
+ */
+
+let aplicarFiltros = function(boton) {
+    console.log('valor del boton -->', boton.value);
+    if (boton.id == 'all' && boton.value == 'true') {
+        vaciarContenedor(contendorRifas);
+        console.log('todos borrados');
+
+        htmlConstructor.loadAllRifas(paginaObject.listaRifas, contendorRifas);
+        delete paginaObject.rifasFiltradas;
+        console.log(paginaObject);
+    } else if (boton.id != 'all') {
+        if (!paginaObject.hasOwnProperty('rifasFiltradas')) { paginaObject.rifasFiltradas = new Array() };
+        paginaObject.rifasFiltradas.push(boton);
+        console.log(paginaObject);
+
+    };
+
+};
+
+/*
+Aquí borro la lista desde el último al primero por que si no solo borra la mitad
+al quitar la posición 0 el resto de la lista en el siguiente bucle a reducido su indice en 1
+
+*/
+let vaciarContenedor = function(contenedor) {
+    let listaHijos = contenedor.childNodes;
+    for (let index = (listaHijos.length - 1); index >= 0; index--) {
+        console.log(listaHijos[index]);
+        listaHijos[index].remove();
+    };
 };
 
 /**
@@ -39,9 +165,11 @@ var htmlConstructor = {
  * pero no seran visibles en el main.
  * 
  */
-
+/*
+==============================================
 // funciones para la zapatilla
-
+===============================================
+*/
 let getTitulo = function(object) {
     let titulo = document.createElement("h1");
     titulo.className = 'pb-3';
@@ -61,9 +189,11 @@ let getDescription = function(object) {
     description.textContent = object.code + " | " + object.avaliable + " | " + object.price;
     return description;
 };
-
+/*
+==============================================
 // funciones para las tarjetas de las rifas.
-
+=============================================
+*/
 /** Generamos el contenedor de una rifa */
 let createRifa = function(object) {
     let rifaContainer = document.createElement("div");
@@ -82,7 +212,7 @@ let getLogo = function(object) {
 
 let getDatosRifa = function(object) {
     let datosContainer = document.createElement("div");
-    datosContainer.className = "w-75 m-auto text-center";
+    datosContainer.className = "w-75 m-auto text-center pt-4";
     datosContainer.appendChild(getTituloRifa(object));
     datosContainer.appendChild(getInfoRifa(object));
     return datosContainer;
@@ -94,80 +224,35 @@ let getTituloRifa = function(object) {
     titulo.style.fontWeight = "bold";
     return titulo;
 };
-/** 
-     * Con esta funcion mi codigoo seria mas open-code  el problema 
-     * que he tenido ha sio filtrar los atributos que quiero mostrar
-     * , porque siempre me cogía la url del logo
-     * por eso he decidido no perder tiempo y continuar con la siguiente funcion
-     * 
-    var getInfoRifa = function (object) {
-        let infoContainer = document.createElement("div");
 
-
-        infoContainer.className = "w-100 text-center";
-        Object.values(object).forEach(element => {
-
-            
-            let span = document.createElement("span");
-            span.textContent = element;
-            infoContainer.appendChild(span);
-            let br = document.createElement("br");
-            infoContainer.appendChild(br);
-        })
-
-        return infoContainer;
-    }
-    */
 
 let getInfoRifa = function(object) {
     let infoContainer = document.createElement("div");
-    infoContainer.className = "w-100 text-center";
-    infoContainer.appendChild(getSpan(object));
-    /*
-    Object.values(object).forEach(element => {
-        fitros["element"] = element;
-    });
-    infoContainer.appendChild(getSpan(object.country));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpan(object.purchase));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpan(object.collection));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanSize(object.Sizes));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanOpens(object.opens));
-    infoContainer.appendChild(getBr());
-    infoContainer.appendChild(getSpanClose(object.Closes));*/
+    infoContainer.className = "w-100 text-center pt-2";
+    infoContainer.appendChild(getParrafo(object));
     infoContainer.appendChild(getBr());
     infoContainer.appendChild(getButton(object));
     infoContainer.appendChild(getBr());
     infoContainer.appendChild(getButtonEntered(object));
     return infoContainer;
 };
-let getSpan = function(object) {
-    let span = document.createElement("span");
+let getParrafo = function(object) {
+    let span = document.createElement("pre");
     span.textContent = object.toString();
     return span;
 };
-let getSpanSize = function(value) {
-    let span = document.createElement("span");
-    span.textContent = "Size - " + value;
-    return span;
-};
-let getSpanOpens = function(value) {
-    let span = document.createElement("span");
-    span.textContent = "Opens - " + value;
-    return span;
-};
-let getSpanClose = function(value) {
-    let span = document.createElement("span");
-    span.textContent = "Closes - " + value;
-    return span;
-};
+
 let getBr = function() {
     let br = document.createElement("br");
     return br;
 };
+
+
+/* 
+===========================================
+ // Creamos los botones
+===========================================
+*/
 /**
  * Creo el boton y añado para capturar evento over
  */
@@ -209,11 +294,11 @@ let getButton = function(object) {
 let getButtonEntered = function(objeto) {
     let button = document.createElement("button");
     button.style.fontWeight = "bold";
-    button.className = "btn";
+    button.className = "btn py-3";
     button.id = objeto.nombre;
     button.name = objeto.nombre;
     button.addEventListener("click", function() {
-        updateStorage(objeto.nombre);
+        htmlConstructor.updateStorage(objeto.nombre);
     }, true);
     //button.onclick = updateStorage(button.name);
     if ((localStorage.getItem(objeto.nombre)) && (localStorage.getItem(objeto.nombre) == "true")) {
@@ -226,6 +311,14 @@ let getButtonEntered = function(objeto) {
     return button;
 };
 
+
+/**
+ * ===============================================
+ * Exporto un solo objeto para toda la aplicacion.
+ * 
+ * Las funciones que están fuera del objeto , no son accesibles en el main.
+ * ==============================================
+ */
 export function singletonHtml() {
 
     const prototipo = htmlConstructor;

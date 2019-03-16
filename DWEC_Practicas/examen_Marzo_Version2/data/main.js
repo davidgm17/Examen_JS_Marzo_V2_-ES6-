@@ -18,30 +18,29 @@ import classes from "../css/style.css";
 
 
 export let Filters = singletonFilter().get();
-var paginaObject = singletonPgWeb().get();
+export var paginaObject = singletonPgWeb().get();
 var toHtml = htmlContructor().get();
-
-
-
-var contenedorZapatilla;
-var contendorRifas;
+export var contendorRifas;
 
 
 window.onload = function() {
     /** Localizamos los contenedores de los datos */
-    contenedorZapatilla = document.getElementById("datosZapa");
+    var contenedorZapatilla = document.getElementById("datosZapa");
     contendorRifas = document.getElementById("contendorRifas");
-
+    var contenedorFiltros = document.getElementById("zapatilla");
+    // Creamos todos los objetos y los añadimos a
+    // pagina object, actua como un contenedor de datos.
     paginaObject.addListaRifas(raffleDataSource);
     paginaObject.addFiltros(Filters);
     paginaObject.shoe = new ShoeDTO(ShoeDataSource);
-    //Object.assign(paginaObject.filtros, Filters);
+
     console.log(paginaObject);
     console.log(Filters);
+    console.log(toHtml);
     //window.alert('mirar en la consola ,pulsa F12');
 
     // Poblamos el html.
-    console.log(toHtml);
     toHtml.loadZapatilla(paginaObject.shoe, contenedorZapatilla);
     toHtml.loadAllRifas(paginaObject.listaRifas, contendorRifas);
+    toHtml.loadFiltros(paginaObject.filtros, contenedorFiltros);
 };
