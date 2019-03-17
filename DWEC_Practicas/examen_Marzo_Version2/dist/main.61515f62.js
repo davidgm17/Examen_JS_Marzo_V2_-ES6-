@@ -266,16 +266,14 @@ var htmlConstructor = {
 
     if (localStorage.getItem(nombre) && localStorage.getItem(nombre) == "true") {
       localStorage.setItem(nombre, false);
-
-      var _boton = document.getElementById(nombre);
-
-      _boton.innerText = "Mark as Entered";
+      var boton = document.getElementById(nombre);
+      boton.innerText = "Mark as Entered";
     } else {
       localStorage.setItem(nombre, true);
 
-      var _boton2 = document.getElementById(nombre);
+      var _boton = document.getElementById(nombre);
 
-      _boton2.innerText = "Entered";
+      _boton.innerText = "Entered";
     }
   }
 };
@@ -372,7 +370,7 @@ var desactivarRestoBotones = function desactivarRestoBotones(botonAll) {
 
 
 var aplicarFiltros = function aplicarFiltros(boton) {
-  console.log('valor del boton -->', boton.value);
+  vaciarContenedor(_main.contendorRifas);
 
   if (boton.id == 'all' && boton.value == 'true') {
     vaciarContenedor(_main.contendorRifas);
@@ -404,7 +402,6 @@ var vaciarContenedor = function vaciarContenedor(contenedor) {
   var listaHijos = contenedor.childNodes;
 
   for (var index = listaHijos.length - 1; index >= 0; index--) {
-    console.log(listaHijos[index]);
     listaHijos[index].remove();
   }
 
@@ -415,13 +412,22 @@ hay que iterar sobre los objetos de la lista en función del boton.
 */
 
 
-var listaActual = function listaActual(listaObjetos) {
-  var listaSalida = new Array();
+var listaActual = function listaActual(listaObjetos, boton) {
+  //let listaSalida = new Array();
+  _main.paginaObject.rifasFiltradas = [];
+  var propiedad = boton.parentElement;
+  propiedad = propiedad.id;
+  var valor = boton.id;
+  propiedad == 'country' ? valor = valor.substring(0, 2) : valor;
+  listaObjetos.forEach(function (rifa) {
+    if (rifa[propiedad].includes(valor)) {
+      _main.paginaObject.rifasFiltradas.push(rifa);
+    }
 
-  _main.paginaObject.rifasFiltradas.push(boton); // TODO
-
-
-  return listaSalida;
+    ;
+  });
+  console.log(_main.paginaObject.rifasFiltradas);
+  return _main.paginaObject.rifasFiltradas;
 };
 /**
  * Aqui están las funciones con las que voy a crear los diferentes elementos
@@ -1104,7 +1110,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64493" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61485" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

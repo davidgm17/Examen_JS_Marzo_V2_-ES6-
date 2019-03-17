@@ -133,7 +133,7 @@ let desactivarRestoBotones = function(botonAll) {
  */
 
 let aplicarFiltros = function(boton) {
-    console.log('valor del boton -->', boton.value);
+    vaciarContenedor(contendorRifas);
     if (boton.id == 'all' && boton.value == 'true') {
         vaciarContenedor(contendorRifas);
         console.log('todos borrados');
@@ -158,7 +158,6 @@ al quitar la posición 0 el resto de la lista en el siguiente bucle a reducido s
 let vaciarContenedor = function(contenedor) {
     let listaHijos = contenedor.childNodes;
     for (let index = (listaHijos.length - 1); index >= 0; index--) {
-        console.log(listaHijos[index]);
         listaHijos[index].remove();
     };
 };
@@ -166,11 +165,20 @@ let vaciarContenedor = function(contenedor) {
 /* 
 hay que iterar sobre los objetos de la lista en función del boton.
 */
-let listaActual = function(listaObjetos) {
-        let listaSalida = new Array();
-        paginaObject.rifasFiltradas.push(boton);
-        // TODO
-        return listaSalida;
+let listaActual = function(listaObjetos, boton) {
+        //let listaSalida = new Array();
+        paginaObject.rifasFiltradas = [];
+        let propiedad = boton.parentElement;
+        propiedad = propiedad.id;
+        let valor = boton.id;
+        (propiedad == 'country') ? valor = valor.substring(0, 2): valor;
+        listaObjetos.forEach(rifa => {
+            if (rifa[propiedad].includes(valor)) {
+                paginaObject.rifasFiltradas.push(rifa);
+            };
+        });
+        console.log(paginaObject.rifasFiltradas);
+        return paginaObject.rifasFiltradas;
 
     }
     /**
