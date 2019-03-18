@@ -169,6 +169,7 @@ var raffles = {
     "purchase": "Online FCFS",
     "collection": "Postage Available",
     "Sizes": "TBC",
+    "Rabo": "25cm",
     "Opens": "announced",
     "Closes": "07/02 @ 12AM CET",
     "url": "https://www.holypopstore.com/en/footwear"
@@ -311,7 +312,7 @@ var getBotonFiltro = function getBotonFiltro(filtro) {
   botonFiltro.textContent = filtro.toUpperCase();
   botonFiltro.setAttribute('type', 'button');
   botonFiltro.setAttribute('value', 'false');
-  botonFiltro.classList.add('btn', 'btn-outline-success');
+  botonFiltro.classList.add('btn', 'btn-outline-success', 'my-3');
   botonFiltro.addEventListener("click", function (ev) {
     if (botonFiltro.value == 'true') {
       desactivarBoton(this);
@@ -419,9 +420,15 @@ var listaActual = function listaActual(listaObjetos, boton) {
   propiedad = propiedad.id;
   var valor = boton.id;
   propiedad == 'country' ? valor = valor.substring(0, 2) : valor;
+  propiedad == 'collection' ? valor = valor.substring(0, 6) : valor;
+  console.log(propiedad);
   listaObjetos.forEach(function (rifa) {
-    if (rifa[propiedad].includes(valor)) {
-      _main.paginaObject.rifasFiltradas.push(rifa);
+    if (rifa[propiedad]) {
+      if (rifa[propiedad].includes(valor)) {
+        _main.paginaObject.rifasFiltradas.push(rifa);
+      }
+
+      ;
     }
 
     ;
@@ -656,12 +663,6 @@ function () {
       } else if (propiedadNombre.includes("purchase")) {
         if (this[propiedadNombre]) {
           this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], damePurchases(propiedadValor));
-          /*for (var property of damePurchases(propiedadValor)) {
-              console.log(property);
-              if (!this[propiedadNombre].has(property)) {
-                  this[propiedadNombre].add(property);
-              }
-          };*/
         } else {
           this[propiedadNombre] = damePurchases(propiedadValor);
         }
@@ -670,11 +671,16 @@ function () {
       } else if (propiedadNombre.includes("collection")) {
         if (this[propiedadNombre]) {
           this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCollections(propiedadValor));
-          /*for (var property of dameCollections(propiedadValor)) {
-              if (!this[propiedadNombre].has(property)) {
-                  this[propiedadNombre].add(property);
-              }
-          };*/
+        } else {
+          this[propiedadNombre] = dameCollections(propiedadValor);
+        }
+
+        ;
+      } else if (!propiedadNombre.includes("Size")) {
+        console.log(propiedadNombre);
+
+        if (this[propiedadNombre]) {
+          this[propiedadNombre] = poblarPropiedadTipoSet(this[propiedadNombre], dameCollections(propiedadValor));
         } else {
           this[propiedadNombre] = dameCollections(propiedadValor);
         }
@@ -775,6 +781,8 @@ var dameCollections = function dameCollections(cadenaPalabras) {
     listaPalabras.add(cadenaPalabras.split('and')[0].trim());
   } else if (cadenaPalabras.includes('vailable')) {
     listaPalabras.add(cadenaPalabras.split('Available')[0].trim());
+  } else {
+    listaPalabras.add(cadenaPalabras.trim());
   }
 
   ;
@@ -1110,7 +1118,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61485" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50736" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

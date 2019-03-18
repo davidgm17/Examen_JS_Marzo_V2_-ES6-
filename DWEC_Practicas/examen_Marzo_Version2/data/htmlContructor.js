@@ -76,7 +76,7 @@ let getBotonFiltro = function(filtro) {
     botonFiltro.textContent = filtro.toUpperCase();
     botonFiltro.setAttribute('type', 'button');
     botonFiltro.setAttribute('value', 'false');
-    botonFiltro.classList.add('btn', 'btn-outline-success');
+    botonFiltro.classList.add('btn', 'btn-outline-success', 'my-3');
     botonFiltro.addEventListener("click", function(ev) {
 
         if (botonFiltro.value == 'true') {
@@ -172,9 +172,13 @@ let listaActual = function(listaObjetos, boton) {
         propiedad = propiedad.id;
         let valor = boton.id;
         (propiedad == 'country') ? valor = valor.substring(0, 2): valor;
+        (propiedad == 'collection') ? valor = valor.substring(0, 6): valor;
+        console.log(propiedad);
         listaObjetos.forEach(rifa => {
-            if (rifa[propiedad].includes(valor)) {
-                paginaObject.rifasFiltradas.push(rifa);
+            if (rifa[propiedad]) {
+                if (rifa[propiedad].includes(valor)) {
+                    paginaObject.rifasFiltradas.push(rifa);
+                };
             };
         });
         console.log(paginaObject.rifasFiltradas);

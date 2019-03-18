@@ -47,6 +47,7 @@ export var raffles = {
         "purchase": "Online FCFS",
         "collection": "Postage Available",
         "Sizes": "TBC",
+        "Rabo": "25cm",
         "Opens": "announced",
         "Closes": "07/02 @ 12AM CET",
         "url": "https://www.holypopstore.com/en/footwear"
