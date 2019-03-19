@@ -1,9 +1,0 @@
-El objetivo de mi proyecto es crear un sistema dómotico que permita el mantenimiento de plantas dentro 
-de una vivienda de forma autosuficiente.Optimizando de esta forma recursos como el agua y el tiempo.
-Para ello he realizado un prototipo, mediante tecnología Arduino, que se encarga de recoger información acerca 
-de las condiciones climáticas (luz, humedad, temperatura) que afectan directamente a la planta.
-Además el sistema utiliza estos datos para mantener las plantas en condiciones óptimas. 
-
-Este prototipo puede implantarse en superficies más grandes, para ello es necesario una mayor inversión,
-pero teniendo en cuenta el precio económico de esta tecnología en comparación con otras similares,
- hace que sea factible.
